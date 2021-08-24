@@ -38,6 +38,18 @@ var xScale = d3.scaleLinear().domain([0, 100]).range([0, width]),
   .style('font-size', 12)
   .text('Dependant');
 
+  //Place Line
+  svg.append("path")
+  .datum(dataset1)
+  .attr("fill", "none")
+  .attr("stroke", "#69b3a2")
+  .attr("stroke-width", 1.5)
+  .attr("transform", "translate(100," + 100 + ")") // .attr("transform","translate((x," + y + ")"))
+  .attr("d", d3.line()
+    .x(function(d) { return xScale(d[0]) })
+    .y(function(d) { return yScale(d[1]) })
+    ) 
+
   //X Axis
   g.append("g")
          .attr("transform", "translate(0," + height + ")")
@@ -47,6 +59,7 @@ var xScale = d3.scaleLinear().domain([0, 100]).range([0, width]),
   g.append("g")
     .call(d3.axisLeft(yScale));
 
+  //Place Dots
   svg.append("g")
     .selectAll("dot")
     .data(dataset1)
