@@ -1,38 +1,105 @@
-var k=2;
+var k=3;
+var sum=0;
 var clustersArray=[];
 var studentsArray=[];
+var subjectDistanceArray=[];
+var euclideanDistanceArray=[];
+var sumArray=[];
 var subjectsArray=["Ab Studies","Biology","Bus Ent","Chem","Child St","Dance","D&T","Digital Technologies","Drama","English","English Lit Studies","French","F&H","Gen Maths","Geography","History","IP","Math Meth","Music","PE","Physics","Psychology","Spec Maths","WP Prac","Vetamorphus","VET","VART"];
 
-function student(studentNo,abStudies,bio,bus,chem,childst,dance,dt,digiTech,drama,english,englishLit,french,foodHos,genMath,geo,history,IP,mathMeth,music,pe,physics,psych,specMath,wp,vetamorphus,VET,VART) {
+function studentK1(studentNo,c1) {
     this.studentNumber = studentNo;
-    this.abStudies = abStudies;
-    this.biology = bio;
-    this.business = bus;
-    this.chemistry = chem;
-    this.childStudies = childst;
-    this.dance = dance;
-    this.dt = dt;
-    this.digitalTech = digiTech;
-    this.drama = drama;
-    this.english = english;
-    this.englishLit = englishLit;
-    this.french = french;
-    this.foodHos = foodHos;
-    this.generalMaths = genMath;
-    this.geography = geo;
-    this.history = history;
-    this.IP = IP;
-    this.mathMethods = mathMeth;
-    this.music = music;
-    this.PE = pe;
-    this.physics = physics;
-    this.biology = bio;
-    this.psychology = psych;
-    this.specMath = specMath;
-    this.workplacePractices = wp;
-    this.vetamorphus = vetamorphus;
-    this.VET = VET;
-    this.visualArt = VART;
+    this.cluster1=c1;
+}
+
+function studentK2(studentNo,c1,c2) {
+    this.studentNumber = studentNo;
+    this.cluster1=c1;
+    this.cluster2=c2;
+}
+
+function studentK3(studentNo,c1,c2,c3) {
+    this.studentNumber = studentNo;
+    this.cluster1=c1;
+    this.cluster2=c2;
+    this.cluster3=c3;
+}
+
+function studentK4(studentNo,c1,c2,c3,c4) {
+    this.studentNumber = studentNo;
+    this.cluster1=c1;
+    this.cluster2=c2;
+    this.cluster3=c3;
+    this.cluster4=c4;
+}
+
+function studentK5(studentNo,c1,c2,c3,c4,c5) {
+    this.studentNumber = studentNo;
+    this.cluster1=c1;
+    this.cluster2=c2;
+    this.cluster3=c3;
+    this.cluster4=c4;
+    this.cluster5=c5;
+}
+
+function studentK6(studentNo,c1,c2,c3,c4,c5,c6) {
+    this.studentNumber = studentNo;
+    this.cluster1=c1;
+    this.cluster2=c2;
+    this.cluster3=c3;
+    this.cluster4=c4;
+    this.cluster5=c5;
+    this.cluster6=c6;
+}
+
+function studentK7(studentNo,c1,c2,c3,c4,c5,c6,c7) {
+    this.studentNumber = studentNo;
+    this.cluster1=c1;
+    this.cluster2=c2;
+    this.cluster3=c3;
+    this.cluster4=c4;
+    this.cluster5=c5;
+    this.cluster6=c6;
+    this.cluster7=c7;
+}
+
+function studentK8(studentNo,c1,c2,c3,c4,c5,c6,c7,c8) {
+    this.studentNumber = studentNo;
+    this.cluster1=c1;
+    this.cluster2=c2;
+    this.cluster3=c3;
+    this.cluster4=c4;
+    this.cluster5=c5;
+    this.cluster6=c6;
+    this.cluster7=c7;
+    this.cluster8=c8;
+}
+
+function studentK9(studentNo,c1,c2,c3,c4,c5,c6,c7,c8,c9) {
+    this.studentNumber = studentNo;
+    this.cluster1=c1;
+    this.cluster2=c2;
+    this.cluster3=c3;
+    this.cluster4=c4;
+    this.cluster5=c5;
+    this.cluster6=c6;
+    this.cluster7=c7;
+    this.cluster8=c8;
+    this.cluster9=c9;
+}
+
+function studentK10(studentNo,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10) {
+    this.studentNumber = studentNo;
+    this.cluster1=c1;
+    this.cluster2=c2;
+    this.cluster3=c3;
+    this.cluster4=c4;
+    this.cluster5=c5;
+    this.cluster6=c6;
+    this.cluster7=c7;
+    this.cluster8=c8;
+    this.cluster9=c9;
+    this.cluster10=c10;
 }
 
 $(document).ready(function(){
@@ -103,20 +170,112 @@ $(document).ready(function(){
     }
 
     function generateDistances(){
-        generateRandomClusters();
+        console.clear();
 
-        for(var i=0;i<88;i++){
-            for(var j=0;j<subjectsArray.length;j++){
-                var x2x1=parseInt(clustersArray[0][ subjectsArray[j] ]) - parseInt(data[i][ subjectsArray[j] ]);
-                var y2y1=parseInt(clustersArray[1][subjectsArray[j]]) - parseInt(data[i][ subjectsArray[j] ]);
+        studentsArray=[];
+        generateRandomClusters();
+        
+            for(var i=0;i<88;i++){
+
+                sumArray=[];
+
+                for(var x=0;x<k;x++){
+
+                    /*clustersArray=[ data[3] , data[8], data[30],data[53] ];
+                    k=(clustersArray.length);*/
+        
+                    euclideanDistanceArray=[];
+                    subjectDistanceArray=[];
+                    sum=0;
+        
+                    for(var j=0;j<subjectsArray.length;j++){ 
+                        var clusterSubject=Math.pow( ( parseInt(clustersArray[x][ subjectsArray[j] ]) - parseInt(data[i][ subjectsArray[j] ]) ), 2); 
+                        subjectDistanceArray.push(clusterSubject);
+        
+                    }
+        
+                    for(var j=0;j<subjectDistanceArray.length;j++){
+                        sum = sum + subjectDistanceArray[j];
+                    }
+
+                    sumArray.push(sum);
+
+                    if( x == (k-1) ){
+                        if(k==1){
+                            studentsArray.push( new studentK1( 
+                                (i+1) , Math.sqrt(sumArray[0])
+                                
+                            ));
+                        }else if(k==2){
+                            studentsArray.push( new studentK2( 
+                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1])
+                                
+                            ));
+
+                        }else if(k==3){
+                            studentsArray.push( new studentK3( 
+                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2])
+                                
+                            ));
+
+                        }else if(k==4){
+                            studentsArray.push( new studentK4( 
+                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]), 
+                                Math.sqrt(sumArray[3])
+                                
+                            ));
+
+                        }else if(k==5){
+                            studentsArray.push( new studentK5( 
+                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]), 
+                                Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4])
+                                
+                            ));
+                        }else if(k==6){
+                            studentsArray.push( new studentK6( 
+                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]),
+                                Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4]), Math.sqrt(sumArray[5])
+                                
+                            ));
+                        }else if(k==7){
+                            studentsArray.push( new studentK7( 
+                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]),
+                                Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4]), Math.sqrt(sumArray[5]), 
+                                Math.sqrt(sumArray[6])
+                                
+                            ));
+                        }else if(k==8){
+                            studentsArray.push( new studentK8( 
+                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]),
+                                Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4]), Math.sqrt(sumArray[5]), 
+                                Math.sqrt(sumArray[6]), Math.sqrt(sumArray[7])
+                                
+                            ));
+                        }else if(k==9){
+                            studentsArray.push( new studentK9( 
+                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]),
+                                Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4]), Math.sqrt(sumArray[5]), 
+                                Math.sqrt(sumArray[6]), Math.sqrt(sumArray[7]), Math.sqrt(sumArray[8])
+                                
+                            ));
+                        }else if(k==10){
+                            studentsArray.push( new studentK10( 
+                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]),
+                                Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4]), Math.sqrt(sumArray[5]), 
+                                Math.sqrt(sumArray[6]), Math.sqrt(sumArray[7]), Math.sqrt(sumArray[8]), 
+                                Math.sqrt(sumArray[9])
+                                
+                            ));
+                        }else{
+                            console.log("functionality not developed yet");
+                            i=87;
+                        }
+                    }
+                    
+                }
+
             }
-            studentsArray.push( new student( 
-                (i+1) , Math.sqrt( Math.pow(x2x1,2) + Math.pow(y2y1,2))
-                
-                
-                ));
-            
-        }
+
         console.log( studentsArray );
 
     }
