@@ -6,6 +6,10 @@ var subjectDistanceArray=[];
 var euclideanDistanceArray=[];
 var sumArray=[];
 var subjectsArray=["Ab Studies","Biology","Bus Ent","Chem","Child St","Dance","D&T","Digital Technologies","Drama","English","English Lit Studies","French","F&H","Gen Maths","Geography","History","IP","Math Meth","Music","PE","Physics","Psychology","Spec Maths","WP Prac","Vetamorphus","VET","VART"];
+var clusterObjectArray=["cluster1","cluster2","cluster3","cluster4","cluster5","cluster6","cluster7","cluster8","cluster9","cluster10"];
+var currentAssign = 0;
+var nearestAssign = 0;
+var studentClusterAssignment=[];
 
 function studentK1(studentNo,c1) {
     this.studentNumber = studentNo;
@@ -152,7 +156,23 @@ $(document).ready(function(){
     })
 
     $('#generateDistances').click(function(){
+        generateRandomClusters();
         generateDistances();
+    })
+
+    $('#runAlgorithm').click(function(){
+        console.clear();
+        console.log(data);
+
+        studentsArray=[];
+
+        generateRandomClusters();
+        generateDistances();
+        nearestDistance();
+        convertDistanceToClusterNumber();
+
+        console.log( studentsArray );   
+        console.log(studentClusterAssignment);
     })
 
     function generateRandomClusters(){
@@ -166,117 +186,167 @@ $(document).ready(function(){
                 }
             }
         }
+
+        clustersArray=[ data[0] , data[20] , data[40] ];
+        console.clear();
         console.log(clustersArray);
     }
 
     function generateDistances(){
-        console.clear();
-
-        studentsArray=[];
-        generateRandomClusters();
         
-            for(var i=0;i<88;i++){
+        for(var i=0;i<88;i++){ // euclidean distance
 
-                sumArray=[];
+            sumArray=[];
 
-                for(var x=0;x<k;x++){
+            for(var x=0;x<k;x++){
 
-                    /*clustersArray=[ data[3] , data[8], data[30],data[53] ];
-                    k=(clustersArray.length);*/
-        
-                    euclideanDistanceArray=[];
-                    subjectDistanceArray=[];
-                    sum=0;
-        
-                    for(var j=0;j<subjectsArray.length;j++){ 
-                        var clusterSubject=Math.pow( ( parseInt(clustersArray[x][ subjectsArray[j] ]) - parseInt(data[i][ subjectsArray[j] ]) ), 2); 
-                        subjectDistanceArray.push(clusterSubject);
-        
+                /*clustersArray=[ data[3] , data[8], data[30],data[53] ];
+                k=(clustersArray.length);*/
+    
+                euclideanDistanceArray=[];
+                subjectDistanceArray=[];
+                sum=0;
+    
+                for(var j=0;j<subjectsArray.length;j++){ 
+                    var clusterSubject=Math.pow( ( parseInt(clustersArray[x][ subjectsArray[j] ]) - parseInt(data[i][ subjectsArray[j] ]) ), 2); 
+                    subjectDistanceArray.push(clusterSubject);
+    
+                }
+    
+                for(var j=0;j<subjectDistanceArray.length;j++){
+                    sum = sum + subjectDistanceArray[j];
+                }
+
+                sumArray.push(sum);
+
+                if( x == (k-1) ){
+                    if(k==1){
+                        studentsArray.push( new studentK1( 
+                            (i+1) , Math.sqrt(sumArray[0])
+                            
+                        ));
+                    }else if(k==2){
+                        studentsArray.push( new studentK2( 
+                            (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1])
+                            
+                        ));
+
+                    }else if(k==3){
+                        studentsArray.push( new studentK3( 
+                            (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2])
+                            
+                        ));
+
+                    }else if(k==4){
+                        studentsArray.push( new studentK4( 
+                            (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]), 
+                            Math.sqrt(sumArray[3])
+                            
+                        ));
+
+                    }else if(k==5){
+                        studentsArray.push( new studentK5( 
+                            (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]), 
+                            Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4])
+                            
+                        ));
+                    }else if(k==6){
+                        studentsArray.push( new studentK6( 
+                            (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]),
+                            Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4]), Math.sqrt(sumArray[5])
+                            
+                        ));
+                    }else if(k==7){
+                        studentsArray.push( new studentK7( 
+                            (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]),
+                            Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4]), Math.sqrt(sumArray[5]), 
+                            Math.sqrt(sumArray[6])
+                            
+                        ));
+                    }else if(k==8){
+                        studentsArray.push( new studentK8( 
+                            (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]),
+                            Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4]), Math.sqrt(sumArray[5]), 
+                            Math.sqrt(sumArray[6]), Math.sqrt(sumArray[7])
+                            
+                        ));
+                    }else if(k==9){
+                        studentsArray.push( new studentK9( 
+                            (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]),
+                            Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4]), Math.sqrt(sumArray[5]), 
+                            Math.sqrt(sumArray[6]), Math.sqrt(sumArray[7]), Math.sqrt(sumArray[8])
+                            
+                        ));
+                    }else if(k==10){
+                        studentsArray.push( new studentK10( 
+                            (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]),
+                            Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4]), Math.sqrt(sumArray[5]), 
+                            Math.sqrt(sumArray[6]), Math.sqrt(sumArray[7]), Math.sqrt(sumArray[8]), 
+                            Math.sqrt(sumArray[9])
+                            
+                        ));
+                    }else{
+                        console.log("functionality not developed yet");
+                        i=87;
                     }
+                }
+                
+            }
+
+
+        }
+        console.log(studentsArray);
         
-                    for(var j=0;j<subjectDistanceArray.length;j++){
-                        sum = sum + subjectDistanceArray[j];
-                    }
+    }
+        
+    function nearestDistance(){
 
-                    sumArray.push(sum);
+        studentClusterAssignment=[];
 
-                    if( x == (k-1) ){
-                        if(k==1){
-                            studentsArray.push( new studentK1( 
-                                (i+1) , Math.sqrt(sumArray[0])
-                                
-                            ));
-                        }else if(k==2){
-                            studentsArray.push( new studentK2( 
-                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1])
-                                
-                            ));
+        for(var i=0;i<88;i++){ // find smallest cluster distance
 
-                        }else if(k==3){
-                            studentsArray.push( new studentK3( 
-                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2])
-                                
-                            ));
+            var j=0;
 
-                        }else if(k==4){
-                            studentsArray.push( new studentK4( 
-                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]), 
-                                Math.sqrt(sumArray[3])
-                                
-                            ));
+            for(var j=0;j<k;j++){
+                currentAssign = studentsArray[i][ clusterObjectArray[j] ]; // cluster1
 
-                        }else if(k==5){
-                            studentsArray.push( new studentK5( 
-                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]), 
-                                Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4])
-                                
-                            ));
-                        }else if(k==6){
-                            studentsArray.push( new studentK6( 
-                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]),
-                                Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4]), Math.sqrt(sumArray[5])
-                                
-                            ));
-                        }else if(k==7){
-                            studentsArray.push( new studentK7( 
-                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]),
-                                Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4]), Math.sqrt(sumArray[5]), 
-                                Math.sqrt(sumArray[6])
-                                
-                            ));
-                        }else if(k==8){
-                            studentsArray.push( new studentK8( 
-                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]),
-                                Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4]), Math.sqrt(sumArray[5]), 
-                                Math.sqrt(sumArray[6]), Math.sqrt(sumArray[7])
-                                
-                            ));
-                        }else if(k==9){
-                            studentsArray.push( new studentK9( 
-                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]),
-                                Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4]), Math.sqrt(sumArray[5]), 
-                                Math.sqrt(sumArray[6]), Math.sqrt(sumArray[7]), Math.sqrt(sumArray[8])
-                                
-                            ));
-                        }else if(k==10){
-                            studentsArray.push( new studentK10( 
-                                (i+1) , Math.sqrt(sumArray[0]), Math.sqrt(sumArray[1]), Math.sqrt(sumArray[2]),
-                                Math.sqrt(sumArray[3]), Math.sqrt(sumArray[4]), Math.sqrt(sumArray[5]), 
-                                Math.sqrt(sumArray[6]), Math.sqrt(sumArray[7]), Math.sqrt(sumArray[8]), 
-                                Math.sqrt(sumArray[9])
-                                
-                            ));
-                        }else{
-                            console.log("functionality not developed yet");
-                            i=87;
-                        }
-                    }
+                if(j==0){
+                    nearestAssign = currentAssign;
+                }
+
+                if( currentAssign < nearestAssign ){ // if current <= next
                     
+                    nearestAssign = currentAssign;
+
+                }else if( currentAssign == nearestAssign){
+                    
+                    nearestAssign = currentAssign;
+
+                }else if( nearestAssign < currentAssign ){
+                    
+                }
+            }
+            
+            studentClusterAssignment.push(nearestAssign);
+
+        }
+    }
+
+    function convertDistanceToClusterNumber(){
+
+        for(var i=0;i<88;i++){ // convert nearest distance to cluster number
+
+            for(var j=0;j<k;j++){
+
+                if(studentClusterAssignment[i] == studentsArray[i][ clusterObjectArray[j] ]){
+                    
+                    studentClusterAssignment[i] = j+1;
+
                 }
 
             }
 
-        console.log( studentsArray );
+        }
 
     }
 
