@@ -10,6 +10,16 @@ var clusterObjectArray=["cluster1","cluster2","cluster3","cluster4","cluster5","
 var currentAssign = 0;
 var nearestAssign = 0;
 var studentClusterAssignment=[];
+var c1Array=[];
+var c2Array=[];
+var c3Array=[];
+var c4Array=[];
+var c5Array=[];
+var c6Array=[];
+var c7Array=[];
+var c8Array=[];
+var c9Array=[];
+var c10Array=[];
 
 function studentK1(studentNo,c1) {
     this.studentNumber = studentNo;
@@ -173,6 +183,8 @@ $(document).ready(function(){
 
         console.log( studentsArray );   
         console.log(studentClusterAssignment);
+
+        calculateNewClusters();
     })
 
     function generateRandomClusters(){
@@ -199,10 +211,7 @@ $(document).ready(function(){
             sumArray=[];
 
             for(var x=0;x<k;x++){
-
-                /*clustersArray=[ data[3] , data[8], data[30],data[53] ];
-                k=(clustersArray.length);*/
-    
+                
                 euclideanDistanceArray=[];
                 subjectDistanceArray=[];
                 sum=0;
@@ -295,7 +304,6 @@ $(document).ready(function(){
 
 
         }
-        console.log(studentsArray);
         
     }
         
@@ -348,6 +356,212 @@ $(document).ready(function(){
 
         }
 
+    }
+
+    function calculateNewClusters(){
+        for(var i=0;i<88;i++){
+            if(k==1){
+                if(studentClusterAssignment[i] == 1){
+                    k1Array.push(i);
+                }
+
+            }else if(k==2){
+                if(studentClusterAssignment[i] == 1){
+                    k1Array.push(i);
+                }else if(studentClusterAssignment[i] == 2){
+                    k2Array.push(i);
+                }
+
+            }else if(k==3){
+                if(studentClusterAssignment[i] == 1){
+                    k1Array.push(i);
+                }else if(studentClusterAssignment[i] == 2){
+                    k2Array.push(i);
+                }else if(studentClusterAssignment[i] == 3){
+                    k3Array.push(i);
+                }
+
+            }else if(k==4){
+                if(studentClusterAssignment[i] == 1){
+                    k1Array.push(i);
+                }else if(studentClusterAssignment[i] == 2){
+                    k2Array.push(i);
+                }else if(studentClusterAssignment[i] == 3){
+                    k3Array.push(i);
+                }else if(studentClusterAssignment[i] == 4){
+                    k4Array.push(i);
+                }
+
+            }else if(k==5){
+                if(studentClusterAssignment[i] == 1){
+                    k1Array.push(i);
+                }else if(studentClusterAssignment[i] == 2){
+                    k2Array.push(i);
+                }else if(studentClusterAssignment[i] == 3){
+                    k3Array.push(i);
+                }else if(studentClusterAssignment[i] == 4){
+                    k4Array.push(i);
+                }else if(studentClusterAssignment[i] == 5){
+                    k5Array.push(i);
+                }
+                
+            }else if(k==6){
+                if(studentClusterAssignment[i] == 1){
+                    k1Array.push(i);
+                }else if(studentClusterAssignment[i] == 2){
+                    k2Array.push(i);
+                }else if(studentClusterAssignment[i] == 3){
+                    k3Array.push(i);
+                }else if(studentClusterAssignment[i] == 4){
+                    k4Array.push(i);
+                }else if(studentClusterAssignment[i] == 5){
+                    k5Array.push(i);
+                }else if(studentClusterAssignment[i] == 6){
+                    k6Array.push(i);
+                }
+
+            }else if(k==7){
+                if(studentClusterAssignment[i] == 1){
+                    k1Array.push(i);
+                }else if(studentClusterAssignment[i] == 2){
+                    k2Array.push(i);
+                }else if(studentClusterAssignment[i] == 3){
+                    k3Array.push(i);
+                }else if(studentClusterAssignment[i] == 4){
+                    k4Array.push(i);
+                }else if(studentClusterAssignment[i] == 5){
+                    k5Array.push(i);
+                }else if(studentClusterAssignment[i] == 6){
+                    k6Array.push(i);
+                }else if(studentClusterAssignment[i] == 7){
+                    k7Array.push(i);
+                }
+
+            }else if(k==8){
+                if(studentClusterAssignment[i] == 1){
+                    k1Array.push(i);
+                }else if(studentClusterAssignment[i] == 2){
+                    k2Array.push(i);
+                }else if(studentClusterAssignment[i] == 3){
+                    k3Array.push(i);
+                }else if(studentClusterAssignment[i] == 4){
+                    k4Array.push(i);
+                }else if(studentClusterAssignment[i] == 5){
+                    k5Array.push(i);
+                }else if(studentClusterAssignment[i] == 6){
+                    k6Array.push(i);
+                }else if(studentClusterAssignment[i] == 7){
+                    k7Array.push(i);
+                }else if(studentClusterAssignment[i] == 8){
+                    k8Array.push(i);
+                }
+
+            }else if(k==9){
+                if(studentClusterAssignment[i] == 1){
+                    k1Array.push(i);
+                }else if(studentClusterAssignment[i] == 2){
+                    k2Array.push(i);
+                }else if(studentClusterAssignment[i] == 3){
+                    k3Array.push(i);
+                }else if(studentClusterAssignment[i] == 4){
+                    k4Array.push(i);
+                }else if(studentClusterAssignment[i] == 5){
+                    k5Array.push(i);
+                }else if(studentClusterAssignment[i] == 6){
+                    k6Array.push(i);
+                }else if(studentClusterAssignment[i] == 7){
+                    k7Array.push(i);
+                }else if(studentClusterAssignment[i] == 8){
+                    k8Array.push(i);
+                }else if(studentClusterAssignment[i] == 9){
+                    k9Array.push(i);
+                }
+
+            }else if(k==10){
+                if(studentClusterAssignment[i] == 1){
+                    k1Array.push(i);
+                }else if(studentClusterAssignment[i] == 2){
+                    k2Array.push(i);
+                }else if(studentClusterAssignment[i] == 3){
+                    k3Array.push(i);
+                }else if(studentClusterAssignment[i] == 4){
+                    k4Array.push(i);
+                }else if(studentClusterAssignment[i] == 5){
+                    k5Array.push(i);
+                }else if(studentClusterAssignment[i] == 6){
+                    k6Array.push(i);
+                }else if(studentClusterAssignment[i] == 7){
+                    k7Array.push(i);
+                }else if(studentClusterAssignment[i] == 8){
+                    k8Array.push(i);
+                }else if(studentClusterAssignment[i] == 9){
+                    k9Array.push(i);
+                }else if(studentClusterAssignment[i] == 10){
+                    k10Array.push(i);
+                }
+
+            }else{
+                console.log("functionality not developed");
+            }
+        }
+
+        clustersArray=[];
+
+        for(var m=0;m<k;m++){
+            for( var i=0;i<subjectsArray;i++ ){
+                
+                for(var j=0;j<data.length;j++){
+                    var kSum=0;
+                    kSum=kSum+ data[]
+                }
+
+            }
+        }
+        
+                var kSum=0;
+                
+                
+                if(k==1){
+                    
+    
+                }else if(k==2){
+    
+                }else if(k==3){
+    
+                }else if(k==4){
+    
+                }else if(k==5){
+                    
+                }else if(k==6){
+    
+                }else if(k==7){
+    
+                }else if(k==8){
+    
+                }else if(k==9){
+    
+                }else if(k==10){
+    
+                }else{
+                    console.log("functionality not developed");
+                }
+
+
+    }
+
+    function findAverage(inputArray){
+        for(var m=0;m<inputArray.length;m++){
+    
+            var kSum=0;
+            var kAverage=0;
+
+            for(var l=0;l<88;l++){
+                kSum=kSum+inputArray[m];
+            }
+            kAverage=kSum/(inputArray.length);
+
+        }
+        console.log(kAverage);
     }
 
 });
