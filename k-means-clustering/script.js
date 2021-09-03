@@ -1,4 +1,3 @@
-var k=3;
 var sum=0;
 var clustersArray=[];
 var studentsArray=[];
@@ -10,16 +9,9 @@ var currentAssign = 0;
 var nearestAssign = 0;
 var studentClusterAssignment=[];
 var distanceClusterArray=[];
-var c1Array=[];
-var c2Array=[];
-var c3Array=[];
-var c4Array=[];
-var c5Array=[];
-var c6Array=[];
-var c7Array=[];
-var c8Array=[];
-var c9Array=[];
-var c10Array=[];
+var current = 0;
+var first = 0;
+var k=0;
 
 function student(studentNo,distances){
     this.studentNumber = studentNo;
@@ -87,20 +79,24 @@ $(document).ready(function(){
 
         studentsArray=[];
 
+        k=parseInt( $('#kNumber').val() );
+        if( $('#kNumber').val() == "" ){
+            k=0;
+        }
+
         generateRandomClusters();
         generateDistances();
         nearestDistance();
         convertDistanceToClusterNumber();
 
         console.log( studentsArray );  
-        console.log(studentsArray[0]["distances"].length); 
-        //console.log(studentClusterAssignment);
 
-        //calculateNewClusters();
+        calculateNewClusters();
     })
 
     function generateRandomClusters(){
         clustersArray=[];
+
         for(var i=0;i<k;i++){
             var randomStudent=Math.floor(Math.random()*88);
             console.log(randomStudent);
@@ -111,7 +107,8 @@ $(document).ready(function(){
             }
         }
 
-        clustersArray=[ data[0] , data[20] , data[40] ];
+        /*clustersArray=[ data[0] , data[20] , data[40] ];
+        k=clustersArray.length;*/
         console.clear();
         console.log(clustersArray);
     }
@@ -200,96 +197,32 @@ $(document).ready(function(){
     }
 
     function calculateNewClusters(){
-        
         clustersArray=[];
-
         for(var i=0;i<k;i++){
-            for(var j=0;j<studentClusterAssignment.length;j++){
-                for(var l=0;l<subjectsArray.length;l++){
-                    
-                }
-            }
+            clustersArray.push([]);
         }
 
-        for(var i=0;i<studentClusterAssignment.length;i++){ // run through dataset
-
-            for(var j=0;j<k;j++){ // run for each cluster
+        for(var i=1;i<k+1;i++){ //loop through clusters
+            for(var j=0;j<subjectsArray.length;j++){ //loop through subjects
                 var kSum=0;
-                for( var l=0;l<subjectsArray;l++ ){ // run through all subjects
-                    kSum=kSum+ data[i][l];
-                }
-                //clustersArray.push(kSum/);
-            }
+                var kCount=0;
 
-        }
+                for(var l=0;l<studentClusterAssignment.length;l++){ //loop through students
 
-            if(studentClusterAssignment[i] == 1){
-                k1Array.push(i);
-            }else if(studentClusterAssignment[i] == 2){
-                k2Array.push(i);
-            }else if(studentClusterAssignment[i] == 3){
-                k3Array.push(i);
-            }else if(studentClusterAssignment[i] == 4){
-                k4Array.push(i);
-            }else if(studentClusterAssignment[i] == 5){
-                k5Array.push(i);
-            }else if(studentClusterAssignment[i] == 6){
-                k6Array.push(i);
-            }else if(studentClusterAssignment[i] == 7){
-                k7Array.push(i);
-            }else if(studentClusterAssignment[i] == 8){
-                k8Array.push(i);
-            }else if(studentClusterAssignment[i] == 9){
-                k9Array.push(i);
-            }else if(studentClusterAssignment[i] == 10){
-                k10Array.push(i);
-            }
+                    if(studentClusterAssignment[l] == i){
+                        kSum= kSum+ parseInt( data[l][ subjectsArray[j] ] );
+                        kCount=kCount+1;
+                    }
 
-        clustersArray=[];
-        
-                var kSum=0;
-                
-                
-                if(k==1){
-    
-                }else if(k==2){
-    
-                }else if(k==3){
-    
-                }else if(k==4){
-    
-                }else if(k==5){
-                    
-                }else if(k==6){
-    
-                }else if(k==7){
-    
-                }else if(k==8){
-    
-                }else if(k==9){
-    
-                }else if(k==10){
-    
-                }else{
-                    console.log("functionality not developed");
                 }
 
+                clustersArray[i-1].push( kSum/kCount );
 
-    }
-
-    function findAverage(inputArray){
-        for(var m=0;m<inputArray.length;m++){
-    
-            var kSum=0;
-            var kAverage=0;
-
-            for(var l=0;l<data.length;l++){
-                kSum=kSum+inputArray[m];
             }
-            kAverage=kSum/(inputArray.length);
-
         }
-        console.log(kAverage);
+
+        console.log(clustersArray);
+
     }
 
 });
