@@ -95,6 +95,8 @@ $(document).ready(function(){
         convertDistanceToClusterNumber();
     })
 
+    //NEW COMMENT
+
     function generateRandomClusters(){
         clustersArray=[];
 
