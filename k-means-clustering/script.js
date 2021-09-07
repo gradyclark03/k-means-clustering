@@ -3,7 +3,6 @@ var clustersArray=[];
 var studentsArray=[];
 var subjectDistanceArray=[];
 var euclideanDistanceArray=[];
-var sumArray=[];
 var subjectsArray=["Ab Studies","Biology","Bus Ent","Chem","Child St","Dance","D&T","Digital Technologies","Drama","English","English Lit Studies","French","F&H","Gen Maths","Geography","History","IP","Math Meth","Music","PE","Physics","Psychology","Spec Maths","WP Prac","Vetamorphus","VET","VART"];
 var currentAssign = 0;
 var nearestAssign = 0;
@@ -85,39 +84,50 @@ $(document).ready(function(){
         }
 
         generateRandomClusters();
-        generateDistances();
+        generateFirstDistances();
         nearestDistance();
         convertDistanceToClusterNumber();
 
-        console.log( studentsArray );  
-
         calculateNewClusters();
+
+        generateDistances();
+        nearestDistance();
+        convertDistanceToClusterNumber();
     })
 
     function generateRandomClusters(){
         clustersArray=[];
 
-        for(var i=0;i<k;i++){
+        for(var i=1;i<k;i++){
             var randomStudent=Math.floor(Math.random()*88);
-            console.log(randomStudent);
+
+            if(i==1){
+                clustersArray.push( data[11] );
+            }
+
+            //console.log(randomStudent);
+
             for(var j=0;j<data.length;j++){
-                if(j==randomStudent){
+
+                if(j == randomStudent){
+
                     clustersArray.push(data[j-1]);
+
                 }
+
             }
         }
 
-        /*clustersArray=[ data[0] , data[20] , data[40] ];
-        k=clustersArray.length;*/
+        clustersArray=[ data[11] , data[51] , data[32] ];
+        k=clustersArray.length;
         console.clear();
         console.log(clustersArray);
     }
 
-    function generateDistances(){
+    function generateFirstDistances(){
         
         for(var i=0;i<data.length;i++){ // euclidean distance
 
-            sumArray=[];
             euclideanDistanceArray=[];
 
             for(var x=0;x<k;x++){
@@ -143,6 +153,7 @@ $(document).ready(function(){
             ))
 
         }
+        console.log( studentsArray );  
     }
         
     function nearestDistance(){
@@ -223,6 +234,38 @@ $(document).ready(function(){
 
         console.log(clustersArray);
 
+    }
+
+    function generateDistances(){
+        studentsArray=[];
+        for(var i=0;i<data.length;i++){ // euclidean distance
+
+            euclideanDistanceArray=[];
+
+            for(var x=0;x<k;x++){
+                
+                subjectDistanceArray=[];
+                sum=0;
+                
+                for(var j=0;j<subjectsArray.length;j++){ 
+                    var clusterSubject=Math.pow( ( parseInt(clustersArray[x][j]) - parseInt(data[i][ subjectsArray[j] ]) ), 2); //x2-x1
+                    subjectDistanceArray.push(clusterSubject);
+                    
+                }
+                
+                for(var j=0;j<subjectDistanceArray.length;j++){
+                    sum = sum + subjectDistanceArray[j]; // sum of x2-x1 +...for all subjects from clusters
+                }
+
+                euclideanDistanceArray.push( Math.sqrt(sum) );
+            }
+
+            studentsArray.push( new student( 
+                (i+1) , euclideanDistanceArray
+            ))
+
+        }
+        console.log(studentsArray);
     }
 
 });
