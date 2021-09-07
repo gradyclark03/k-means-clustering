@@ -12,6 +12,8 @@ var current = 0;
 var first = 0;
 var k=0;
 
+//this is the master
+
 function student(studentNo,distances){
     this.studentNumber = studentNo;
     this.distances=distances;
