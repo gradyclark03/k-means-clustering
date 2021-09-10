@@ -7,10 +7,12 @@ var subjectsArray=["Ab Studies","Biology","Bus Ent","Chem","Child St","Dance","D
 var currentAssign = 0;
 var nearestAssign = 0;
 var studentClusterAssignment=[];
+var previousStudentClusterAssignment = [];
 var distanceClusterArray=[];
 var current = 0;
 var first = 0;
 var k=0;
+var unstable = 0;
 
 function student(studentNo,distances){
     this.studentNumber = studentNo;
@@ -23,7 +25,7 @@ $(document).ready(function(){
 
     $.ajax({
         
-        url:"Year 12 Subject Choices 2021.csv", dataType:"text", async: false,
+        url:"Year 12 Subject Choices 2021 - NEW WEIGHTING.csv", dataType:"text", async: false,
         success: function(result){
             
             var JSONfile = csvJSON(result);
@@ -93,6 +95,18 @@ $(document).ready(function(){
         generateDistances();
         nearestDistance();
         convertDistanceToClusterNumber();
+
+        while(unstable == 1){
+            calculateNewClusters();
+
+            generateDistances();
+            nearestDistance();
+            convertDistanceToClusterNumber();
+            checkStability();
+            
+        }
+
+        calculateNewClusters();
     })
 
     //NEW COMMENT
@@ -100,12 +114,8 @@ $(document).ready(function(){
     function generateRandomClusters(){
         clustersArray=[];
 
-        for(var i=1;i<k;i++){
-            var randomStudent=Math.floor(Math.random()*88);
-
-            if(i==1){
-                clustersArray.push( data[11] );
-            }
+        for(var i=0;i<k;i++){
+            var randomStudent=Math.floor(Math.random()*88); 
 
             //console.log(randomStudent);
 
@@ -120,7 +130,7 @@ $(document).ready(function(){
             }
         }
 
-        clustersArray=[ data[11] , data[51] , data[32] ];
+        //clustersArray=[ data[11] , data[51] , data[32] ];
         k=clustersArray.length;
         console.clear();
         console.log(clustersArray);
@@ -205,6 +215,9 @@ $(document).ready(function(){
             }
 
         }
+
+        previousStudentClusterAssignment = studentClusterAssignment;
+
         console.log(studentClusterAssignment);
 
     }
@@ -235,6 +248,21 @@ $(document).ready(function(){
         }
 
         console.log(clustersArray);
+
+    }
+
+    function checkStability(){
+        var stabilitySum = 0 ;
+
+        for(var i=0;i<studentClusterAssignment.length;i++){
+            if(studentClusterAssignment[i] == previousStudentClusterAssignment[i]){
+                stabilitySum=stabilitySum+1;
+            }
+        }
+
+        if(stabilitySum == studentClusterAssignment.length){
+            unstable = 0;
+        }
 
     }
 
