@@ -11,6 +11,7 @@ var distanceClusterArray=[];
 var current = 0;
 var first = 0;
 var k=0;
+var unstable = 1;
 
 //this is the master
 
@@ -245,6 +246,7 @@ $(document).ready(function(){
 
     function checkStability(){
         var stabilitySum = 0 ;
+        var previousStudentClusterAssignment=[];
 
         for(var i=0;i<studentClusterAssignment.length;i++){
             if(studentClusterAssignment[i] == previousStudentClusterAssignment[i]){
