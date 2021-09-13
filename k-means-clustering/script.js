@@ -3,7 +3,7 @@ var clustersArray=[];
 var studentsArray=[];
 var subjectDistanceArray=[];
 var euclideanDistanceArray=[];
-var subjectsArray=["Ab Studies","Biology","Bus Ent","Chem","Child St","Dance","D&T","Digital Technologies","Drama","English","English Lit Studies","French","F&H","Gen Maths","Geography","History","IP","Math Meth","Music","PE","Physics","Psychology","Spec Maths","WP Prac","Vetamorphus","VET","VART"];
+var subjectsArray=[];
 var currentAssign = 0;
 var nearestAssign = 0;
 var studentClusterAssignment=[];
@@ -65,6 +65,15 @@ $(document).ready(function(){
     }
     
     console.log(data);
+    subjectsArray = Object.keys(data[0]);
+    subjectsArray.shift();
+    subjectsArray.pop();
+
+
+    for(var i=0;i<subjectsArray.length;i++){
+        $('#radioContainer').append("<input>" +subjectsArray[i]+"</input>").children().last().attr("type","radio");
+        $('#radioContainer').append("<br>");
+    }
     
 
     $('#generateClusters').click(function(){
