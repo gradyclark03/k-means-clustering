@@ -7,10 +7,12 @@ var subjectsArray=["Ab Studies","Biology","Bus Ent","Chem","Child St","Dance","D
 var currentAssign = 0;
 var nearestAssign = 0;
 var studentClusterAssignment=[];
+var previousStudentClusterAssignment = [];
 var distanceClusterArray=[];
 var current = 0;
 var first = 0;
 var k=0;
+var unstable = 0;
 
 //this is the master
 
@@ -90,6 +92,12 @@ $(document).ready(function(){
         nearestDistance();
         convertDistanceToClusterNumber();
 
+        calculateNewClusters();
+
+        generateDistances();
+        nearestDistance();
+        convertDistanceToClusterNumber();
+
         while(unstable == 1){
             calculateNewClusters();
 
@@ -100,17 +108,16 @@ $(document).ready(function(){
             
         }
 
+        calculateNewClusters();
     })
+
+    //NEW COMMENT
 
     function generateRandomClusters(){
         clustersArray=[];
 
-        for(var i=1;i<k;i++){
-            var randomStudent=Math.floor(Math.random()*88);
-
-            if(i==1){
-                clustersArray.push( data[11] );
-            }
+        for(var i=0;i<k;i++){
+            var randomStudent=Math.floor(Math.random()*88); 
 
             //console.log(randomStudent);
 
@@ -125,7 +132,7 @@ $(document).ready(function(){
             }
         }
 
-        clustersArray=[ data[11] , data[51] , data[32] ];
+        //clustersArray=[ data[11] , data[51] , data[32] ];
         k=clustersArray.length;
         console.clear();
         console.log(clustersArray);
@@ -210,6 +217,9 @@ $(document).ready(function(){
             }
 
         }
+
+        previousStudentClusterAssignment = studentClusterAssignment;
+
         console.log(studentClusterAssignment);
 
     }
