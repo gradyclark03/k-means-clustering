@@ -90,11 +90,16 @@ $(document).ready(function(){
         nearestDistance();
         convertDistanceToClusterNumber();
 
-        calculateNewClusters();
+        while(unstable == 1){
+            calculateNewClusters();
 
-        generateDistances();
-        nearestDistance();
-        convertDistanceToClusterNumber();
+            generateDistances();
+            nearestDistance();
+            convertDistanceToClusterNumber();
+            checkStability();
+            
+        }
+
     })
 
     function generateRandomClusters(){
@@ -235,6 +240,21 @@ $(document).ready(function(){
         }
 
         console.log(clustersArray);
+
+    }
+
+    function checkStability(){
+        var stabilitySum = 0 ;
+
+        for(var i=0;i<studentClusterAssignment.length;i++){
+            if(studentClusterAssignment[i] == previousStudentClusterAssignment[i]){
+                stabilitySum=stabilitySum+1;
+            }
+        }
+
+        if(stabilitySum == studentClusterAssignment.length){
+            unstable = 0;
+        }
 
     }
 
