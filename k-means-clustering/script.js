@@ -4,6 +4,7 @@ var studentsArray=[];
 var subjectDistanceArray=[];
 var euclideanDistanceArray=[];
 var subjectsArray=[];
+var removedSubjectsArray=[];
 var selectedSubjectsArray=[];
 var currentAssign = 0;
 var nearestAssign = 0;
@@ -70,19 +71,20 @@ $(document).ready(function(){
     subjectsArray.shift();
     subjectsArray.pop();
 
-
     for(var i=0;i<subjectsArray.length;i++){
-        $('#radioContainer').append("<input>"+subjectsArray[i]+"</input>").children().last().attr("type","checkbox").attr("id",subjectsArray[i]).val(subjectsArray[i]);
+        $('#radioContainer').append("<input>"+subjectsArray[i]+"</input>").children().last().attr("type","checkbox").attr("id",subjectsArray[i]).val(subjectsArray[i]).prop("checked","true");
         $('#radioContainer').append("<br>");
     }
 
     $('input[type="checkbox"]').click(function(){
-        if($(this).prop("checked") == true){
-            selectedSubjectsArray.push( $(this).val() );
-            console.log(selectedSubjectsArray);
-        }else if( $(this).prop("checked") == false){
-            selectedSubjectsArray.splice( selectedSubjectsArray.indexOf( $(this).val() ) , 1 );
-            console.log(selectedSubjectsArray);
+        if($(this).prop("checked") == false){
+
+            removedSubjectsArray.push( $(this).val() );
+            console.log(removedSubjectsArray);
+        }else if( $(this).prop("checked") == true){
+
+            removedSubjectsArray.splice( (removedSubjectsArray.indexOf( $(this).val() ) ) , 1 );
+            console.log(removedSubjectsArray);
         }
     })
 
@@ -101,7 +103,10 @@ $(document).ready(function(){
 
         studentsArray=[];
 
-        $('#subjectsList').html("");
+        for(var i=0;i<removedSubjectsArray.length;i++){
+            selectedSubjectsArray= subjectsArray.splice( selectedSubjectsArray.indexOf(removedSubjectsArray[i]),1 );
+            previousSubjectsArray= selectedSubjectsArray;
+        }
 
         for(var i=0;i<selectedSubjectsArray.length;i++){
             $("#subjectsList").append("<div></div>").children().last().html(selectedSubjectsArray[i]);
