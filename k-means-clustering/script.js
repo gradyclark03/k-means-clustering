@@ -4,6 +4,7 @@ var studentsArray=[];
 var subjectDistanceArray=[];
 var euclideanDistanceArray=[];
 var subjectsArray=[];
+var selectedSubjectsArray=[];
 var currentAssign = 0;
 var nearestAssign = 0;
 var studentClusterAssignment=[];
@@ -71,10 +72,19 @@ $(document).ready(function(){
 
 
     for(var i=0;i<subjectsArray.length;i++){
-        $('#radioContainer').append("<input>" +subjectsArray[i]+"</input>").children().last().attr("type","radio");
+        $('#radioContainer').append("<input>"+subjectsArray[i]+"</input>").children().last().attr("type","checkbox").attr("id",subjectsArray[i]).val(subjectsArray[i]);
         $('#radioContainer').append("<br>");
     }
-    
+
+    $('input[type="checkbox"]').click(function(){
+        if($(this).prop("checked") == true){
+            selectedSubjectsArray.push( $(this).val() );
+            console.log(selectedSubjectsArray);
+        }else if( $(this).prop("checked") == false){
+            selectedSubjectsArray.splice( selectedSubjectsArray.indexOf( $(this).val() ) , 1 );
+            console.log(selectedSubjectsArray);
+        }
+    })
 
     $('#generateClusters').click(function(){
         generateRandomClusters();
@@ -90,6 +100,12 @@ $(document).ready(function(){
         console.log(data);
 
         studentsArray=[];
+
+        $('#subjectsList').html("");
+
+        for(var i=0;i<selectedSubjectsArray.length;i++){
+            $("#subjectsList").append("<div></div>").children().last().html(selectedSubjectsArray[i]);
+        }
 
         k=parseInt( $('#kNumber').val() );
         if( $('#kNumber').val() == "" ){

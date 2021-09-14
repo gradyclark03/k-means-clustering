@@ -1,7 +1,23 @@
 #kNumber{
     width:30px;
+    float:left;
+}
+#generateClusters{
+    float:left;
+}
+#generateDistances{
+    float:left;
+}
+#runAlgorithm{
+    float:left;
 }
 #radioContainer{
-    width:500px;
-    height:1000px;
+    width:200px;
+    height:600px;
+    float:left;
+}
+#subjectsList{
+    height:600px;
+    width:200px;
+    float:left;
 }
