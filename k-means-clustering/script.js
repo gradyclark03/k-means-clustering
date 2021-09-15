@@ -1,4 +1,5 @@
 var sum=0;
+var refClustersArray=[];
 var clustersArray=[];
 var studentsArray=[];
 var subjectDistanceArray=[];
@@ -9,11 +10,9 @@ var currentAssign = 0;
 var nearestAssign = 0;
 var studentClusterAssignment=[];
 var previousStudentClusterAssignment = [];
-var distanceClusterArray=[];
-var current = 0;
-var first = 0;
 var k=0;
-var unstable = 0;
+var unstable = 1;
+var iter = 0;
 
 //this is the master
 
@@ -101,7 +100,7 @@ $(document).ready(function(){
     })
 
     $('#runAlgorithm').click(function(){
-        console.clear();
+        //console.clear();
         console.log(data);
 
         checkSubjects();
@@ -120,24 +119,19 @@ $(document).ready(function(){
         }
 
         generateRandomClusters();
-        generateFirstDistances();
-        nearestDistance();
-        convertDistanceToClusterNumber();
 
         while(unstable == 1){
-            calculateNewClusters();
-
             generateDistances();
             nearestDistance();
             convertDistanceToClusterNumber();
             checkStability();
-            
+
+            iter=iter+1;
+
+            calculateNewClusters();
         }
 
-        calculateNewClusters();
     })
-
-    //NEW COMMENT
 
     function checkSubjects(){
         subjectsArray = Object.keys(data[0]);
@@ -154,31 +148,32 @@ $(document).ready(function(){
 
     function generateRandomClusters(){
         clustersArray=[];
+        refClustersArray=[];
 
         for(var i=0;i<k;i++){
             var randomStudent=Math.floor(Math.random()*88); 
 
             //console.log(randomStudent);
+            var tempClusterStudent=[];
 
-            for(var j=0;j<data.length;j++){
-
-                if(j == randomStudent){
-
-                    clustersArray.push(data[j-1]);
-
-                }
-
+            for(var j=0;j<subjectsArray.length;j++){
+                tempClusterStudent.push( parseInt( data[randomStudent-1][ subjectsArray[j] ] ) );
             }
+            tempClusterStudent.push(data[randomStudent-1]["ID"]);
+            clustersArray.push(tempClusterStudent);
+            refClustersArray.push(data[randomStudent-1]);
+
         }
 
-        //clustersArray=[ data[11] , data[51] , data[32] ];
-        k=clustersArray.length;
-        console.clear();
+        /*clustersArray=[ data[11] , data[51] , data[32] ];
+        k=clustersArray.length;*/
+        //console.clear();
         console.log(clustersArray);
+        console.log(refClustersArray);
     }
 
-    function generateFirstDistances(){
-        
+    function generateDistances(){
+        studentsArray=[];
         for(var i=0;i<data.length;i++){ // euclidean distance
 
             euclideanDistanceArray=[];
@@ -187,18 +182,18 @@ $(document).ready(function(){
                 
                 subjectDistanceArray=[];
                 sum=0;
-    
+                
                 for(var j=0;j<subjectsArray.length;j++){ 
-                    var clusterSubject=Math.pow( ( parseInt(clustersArray[x][ subjectsArray[j] ]) - parseInt(data[i][ subjectsArray[j] ]) ), 2); //x2-x1
+                    var clusterSubject=Math.pow( ( parseInt(clustersArray[x][j]) - parseInt(data[i][ subjectsArray[j] ]) ), 2); //x2-x1
                     subjectDistanceArray.push(clusterSubject);
-    
+                    
                 }
-    
+                
                 for(var j=0;j<subjectDistanceArray.length;j++){
                     sum = sum + subjectDistanceArray[j]; // sum of x2-x1 +...for all subjects from clusters
                 }
 
-                euclideanDistanceArray.push( Math.sqrt(sum) )
+                euclideanDistanceArray.push( Math.sqrt(sum) );
             }
 
             studentsArray.push( new student( 
@@ -206,7 +201,7 @@ $(document).ready(function(){
             ))
 
         }
-        console.log( studentsArray );  
+        console.log(studentsArray);
     }
         
     function nearestDistance(){
@@ -293,50 +288,20 @@ $(document).ready(function(){
     }
 
     function checkStability(){
-        var stabilitySum = 0 ;
+        if(iter!= 0){
+            var stabilitySum = 0 ;
 
-        for(var i=0;i<studentClusterAssignment.length;i++){
-            if(studentClusterAssignment[i] == previousStudentClusterAssignment[i]){
-                stabilitySum=stabilitySum+1;
+            for(var i=0;i<studentClusterAssignment.length;i++){
+                if(studentClusterAssignment[i] == previousStudentClusterAssignment[i]){
+                    stabilitySum=stabilitySum+1;
+                }
+            }
+
+            if(stabilitySum == studentClusterAssignment.length){
+                unstable = 0;
             }
         }
 
-        if(stabilitySum == studentClusterAssignment.length){
-            unstable = 0;
-        }
-
-    }
-
-    function generateDistances(){
-        studentsArray=[];
-        for(var i=0;i<data.length;i++){ // euclidean distance
-
-            euclideanDistanceArray=[];
-
-            for(var x=0;x<k;x++){
-                
-                subjectDistanceArray=[];
-                sum=0;
-                
-                for(var j=0;j<subjectsArray.length;j++){ 
-                    var clusterSubject=Math.pow( ( parseInt(clustersArray[x][ subjectsArray[j] ]) - parseInt(data[i][ subjectsArray[j] ]) ), 2); //x2-x1
-                    subjectDistanceArray.push(clusterSubject);
-                    
-                }
-                
-                for(var j=0;j<subjectDistanceArray.length;j++){
-                    sum = sum + subjectDistanceArray[j]; // sum of x2-x1 +...for all subjects from clusters
-                }
-
-                euclideanDistanceArray.push( Math.sqrt(sum) );
-            }
-
-            studentsArray.push( new student( 
-                (i+1) , euclideanDistanceArray
-            ))
-
-        }
-        console.log(studentsArray);
     }
 
 });
