@@ -5,7 +5,6 @@ var subjectDistanceArray=[];
 var euclideanDistanceArray=[];
 var subjectsArray=[];
 var removedSubjectsArray=[];
-var selectedSubjectsArray=[];
 var currentAssign = 0;
 var nearestAssign = 0;
 var studentClusterAssignment=[];
@@ -80,10 +79,10 @@ $(document).ready(function(){
         if($(this).prop("checked") == false){
 
             removedSubjectsArray.push( $(this).val() );
+            removedSubjectsArray.sort();
             console.log(removedSubjectsArray);
         }else if( $(this).prop("checked") == true){
-
-            removedSubjectsArray.splice( (removedSubjectsArray.indexOf( $(this).val() ) ) , 1 );
+            removedSubjectsArray.splice( (removedSubjectsArray.indexOf( $(this).val() ) ) , 1 );        
             console.log(removedSubjectsArray);
         }
     })
@@ -96,20 +95,23 @@ $(document).ready(function(){
         generateRandomClusters();
         generateDistances();
     })
+    
+    $('#selectedSubjects').click(function(){
+        checkSubjects();
+    })
 
     $('#runAlgorithm').click(function(){
         console.clear();
         console.log(data);
 
+        checkSubjects();
+
         studentsArray=[];
 
-        for(var i=0;i<removedSubjectsArray.length;i++){
-            selectedSubjectsArray= subjectsArray.splice( selectedSubjectsArray.indexOf(removedSubjectsArray[i]),1 );
-            previousSubjectsArray= selectedSubjectsArray;
-        }
+        $('#subjectsList').html("");
 
-        for(var i=0;i<selectedSubjectsArray.length;i++){
-            $("#subjectsList").append("<div></div>").children().last().html(selectedSubjectsArray[i]);
+        for(var i=0;i<subjectsArray.length;i++){
+            $("#subjectsList").append("<div></div>").children().last().html(subjectsArray[i]);
         }
 
         k=parseInt( $('#kNumber').val() );
@@ -119,12 +121,6 @@ $(document).ready(function(){
 
         generateRandomClusters();
         generateFirstDistances();
-        nearestDistance();
-        convertDistanceToClusterNumber();
-
-        calculateNewClusters();
-
-        generateDistances();
         nearestDistance();
         convertDistanceToClusterNumber();
 
@@ -142,6 +138,19 @@ $(document).ready(function(){
     })
 
     //NEW COMMENT
+
+    function checkSubjects(){
+        subjectsArray = Object.keys(data[0]);
+        subjectsArray.shift();
+        subjectsArray.pop();
+        
+        for(var i=0;i<removedSubjectsArray.length;i++){
+
+            subjectsArray.splice( subjectsArray.indexOf(removedSubjectsArray[i]),1 );
+            
+        }
+        console.log(subjectsArray);
+    }
 
     function generateRandomClusters(){
         clustersArray=[];
@@ -310,7 +319,7 @@ $(document).ready(function(){
                 sum=0;
                 
                 for(var j=0;j<subjectsArray.length;j++){ 
-                    var clusterSubject=Math.pow( ( parseInt(clustersArray[x][j]) - parseInt(data[i][ subjectsArray[j] ]) ), 2); //x2-x1
+                    var clusterSubject=Math.pow( ( parseInt(clustersArray[x][ subjectsArray[j] ]) - parseInt(data[i][ subjectsArray[j] ]) ), 2); //x2-x1
                     subjectDistanceArray.push(clusterSubject);
                     
                 }
