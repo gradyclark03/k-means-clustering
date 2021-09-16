@@ -149,6 +149,7 @@ $(document).ready(function(){
     }
 
     function generateRandomClusters(){
+        $('#clusterContainer').html("");
         clustersArray=[];
         refClustersArray=[];
 
@@ -164,6 +165,14 @@ $(document).ready(function(){
             tempClusterStudent.push(data[randomStudent-1]["ID"]);
             clustersArray.push(tempClusterStudent);
             refClustersArray.push(data[randomStudent-1]);
+
+            $('#clusterContainer').append("<div></div>").children().last().html("Student "+randomStudent)
+            for(var j=0;j<subjectsArray.length;j++){
+                if(clustersArray[i][j] == 1){
+                    $('#clusterContainer').append("<div></div>").children().last().html(subjectsArray[j]);
+                }
+            }
+            $('#clusterContainer').append("<br>");
 
         }
 
