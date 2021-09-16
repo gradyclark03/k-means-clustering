@@ -12,7 +12,7 @@ var studentClusterAssignment=[];
 var previousStudentClusterAssignment = [];
 var k=0;
 var unstable = 1;
-var iter = 0;
+var iter = 0;  
 
 //this is the master
 
@@ -100,8 +100,10 @@ $(document).ready(function(){
     })
 
     $('#runAlgorithm').click(function(){
-        //console.clear();
-        console.log(data);
+        console.clear();
+        console.log(data); 
+        unstable = 1;
+        iter = 0;  
 
         checkSubjects();
 
@@ -167,7 +169,6 @@ $(document).ready(function(){
 
         /*clustersArray=[ data[11] , data[51] , data[32] ];
         k=clustersArray.length;*/
-        //console.clear();
         console.log(clustersArray);
         console.log(refClustersArray);
     }
@@ -252,7 +253,7 @@ $(document).ready(function(){
 
         }
 
-        previousStudentClusterAssignment = studentClusterAssignment;
+        //previousStudentClusterAssignment = studentClusterAssignment;
 
         console.log(studentClusterAssignment);
 
@@ -300,6 +301,10 @@ $(document).ready(function(){
             if(stabilitySum == studentClusterAssignment.length){
                 unstable = 0;
             }
+
+            previousStudentClusterAssignment = studentClusterAssignment;
+        }else if(iter == 0){
+            previousStudentClusterAssignment = studentClusterAssignment;
         }
 
     }
