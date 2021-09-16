@@ -155,6 +155,7 @@ $(document).ready(function(){
 
         for(var i=0;i<k;i++){
             var randomStudent=Math.floor(Math.random()*88); 
+            var studentChecker=0;
 
             //console.log(randomStudent);
             var tempClusterStudent=[];
@@ -162,22 +163,32 @@ $(document).ready(function(){
             for(var j=0;j<subjectsArray.length;j++){
                 tempClusterStudent.push( parseInt( data[randomStudent-1][ subjectsArray[j] ] ) );
             }
-            tempClusterStudent.push(data[randomStudent-1]["ID"]);
-            clustersArray.push(tempClusterStudent);
-            refClustersArray.push(data[randomStudent-1]);
-
-            $('#clusterContainer').append("<div></div>").children().last().html("Student "+randomStudent)
-            for(var j=0;j<subjectsArray.length;j++){
-                if(clustersArray[i][j] == 1){
-                    $('#clusterContainer').append("<div></div>").children().last().html(subjectsArray[j]);
+            
+            for(var j=0;j<tempClusterStudent.length;j++){
+                if(tempClusterStudent[j] == 1){
+                    studentChecker=studentChecker+1;
                 }
             }
-            $('#clusterContainer').append("<br>");
 
+            if(studentChecker > 0){
+                tempClusterStudent.push(data[randomStudent-1]["ID"]);
+                clustersArray.push(tempClusterStudent);
+                refClustersArray.push(data[randomStudent-1]);
+
+                $('#clusterContainer').append("<div></div>").children().last().html("Student "+randomStudent).css({"font-weight":"bold"})
+                for(var j=0;j<subjectsArray.length;j++){
+                    if(clustersArray[i][j] == 1){
+                        $('#clusterContainer').append("<div></div>").children().last().html(subjectsArray[j]);
+                    }
+                }
+                $('#clusterContainer').append("<br>");
+
+            }else{
+                i=i-1;
+                console.log("dud");
+            }
         }
 
-        /*clustersArray=[ data[11] , data[51] , data[32] ];
-        k=clustersArray.length;*/
         console.log(clustersArray);
         console.log(refClustersArray);
     }
@@ -298,7 +309,11 @@ $(document).ready(function(){
     }
 
     function checkStability(){
-        if(iter!= 0){
+        if(iter > 0){
+            if(iter>10){
+                unstable=0;
+            }
+
             var stabilitySum = 0 ;
 
             for(var i=0;i<studentClusterAssignment.length;i++){
