@@ -1,5 +1,6 @@
 var sum=0;
 var refClustersArray=[];
+var randomStudentArray=[];
 var clustersArray=[];
 var studentsArray=[];
 var subjectDistanceArray=[];
@@ -10,6 +11,7 @@ var currentAssign = 0;
 var nearestAssign = 0;
 var studentClusterAssignment=[];
 var previousStudentClusterAssignment = [];
+var unrefinedClustersArray=[];
 var k=0;
 var unstable = 1;
 var iter = 0;  
@@ -132,6 +134,7 @@ $(document).ready(function(){
 
             calculateNewClusters();
         }
+        console.log(unrefinedClustersArray);
 
     })
 
@@ -152,40 +155,52 @@ $(document).ready(function(){
         $('#clusterContainer').html("");
         clustersArray=[];
         refClustersArray=[];
+        randomStudentArray=[];
+        unrefinedClustersArray=[];
 
         for(var i=0;i<k;i++){
             var randomStudent=Math.floor(Math.random()*88); 
-            var studentChecker=0;
 
-            //console.log(randomStudent);
-            var tempClusterStudent=[];
+            unrefinedClustersArray.push(randomStudent);
 
-            for(var j=0;j<subjectsArray.length;j++){
-                tempClusterStudent.push( parseInt( data[randomStudent-1][ subjectsArray[j] ] ) );
-            }
-            
-            for(var j=0;j<tempClusterStudent.length;j++){
-                if(tempClusterStudent[j] == 1){
-                    studentChecker=studentChecker+1;
-                }
-            }
+            if(randomStudentArray.includes(randomStudent) == true ){
+                i=i-1;
+                randomStudentArray.pop();
+            }else{
+                randomStudentArray.push(randomStudent);
 
-            if(studentChecker > 0){
-                tempClusterStudent.push(data[randomStudent-1]["ID"]);
-                clustersArray.push(tempClusterStudent);
-                refClustersArray.push(data[randomStudent-1]);
+                var studentChecker=0;
 
-                $('#clusterContainer').append("<div></div>").children().last().html("Student "+randomStudent).css({"font-weight":"bold"})
+                var tempClusterStudent=[];
+
                 for(var j=0;j<subjectsArray.length;j++){
-                    if(clustersArray[i][j] == 1){
-                        $('#clusterContainer').append("<div></div>").children().last().html(subjectsArray[j]);
+                    tempClusterStudent.push( parseInt( data[randomStudent-1][ subjectsArray[j] ] ) );
+                }
+                
+                for(var j=0;j<tempClusterStudent.length;j++){
+                    if(tempClusterStudent[j] == 1){
+                        studentChecker=studentChecker+1;
                     }
                 }
-                $('#clusterContainer').append("<br>");
 
-            }else{
-                i=i-1;
-                console.log("dud");
+                if(studentChecker > 0){
+                    tempClusterStudent.push(data[randomStudent-1]["ID"]);
+                    clustersArray.push(tempClusterStudent);
+                    refClustersArray.push(data[randomStudent-1]);
+
+                    $('#clusterContainer').append("<div></div>").children().last().html("Student "+randomStudent).css({"font-weight":"bold"})
+                    for(var j=0;j<subjectsArray.length;j++){
+                        if(clustersArray[i][j] == 1){
+                            $('#clusterContainer').append("<div></div>").children().last().html(subjectsArray[j]);
+                        }
+                    }
+                    $('#clusterContainer').append("<br>");
+
+                }else{
+                    i=i-1;
+                    console.log("dud");
+                    randomStudentArray.pop();
+                }
             }
         }
 
