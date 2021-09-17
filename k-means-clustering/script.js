@@ -14,7 +14,7 @@ var previousStudentClusterAssignment = [];
 var unrefinedClustersArray=[];
 var k=0;
 var unstable = 1;
-var iter = 0;  
+var iter = 0;
 
 //this is the master
 
@@ -164,7 +164,7 @@ $(document).ready(function(){
             unrefinedClustersArray.push(randomStudent);
 
             if(randomStudentArray.includes(randomStudent) == true ){
-                i=i-1;
+                i = i-1;
                 randomStudentArray.pop();
             }else{
                 randomStudentArray.push(randomStudent);
@@ -287,8 +287,6 @@ $(document).ready(function(){
             }
 
         }
-
-        //previousStudentClusterAssignment = studentClusterAssignment;
 
         console.log(studentClusterAssignment);
 
