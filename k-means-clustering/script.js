@@ -136,6 +136,8 @@ $(document).ready(function(){
         }
         console.log(unrefinedClustersArray);
 
+        studentsInCluster();
+
     })
 
     function checkSubjects(){
@@ -344,6 +346,21 @@ $(document).ready(function(){
             previousStudentClusterAssignment = studentClusterAssignment;
         }
 
+    }
+
+    function studentsInCluster(){
+        var numClustersArray=[];
+
+        for(var i=1;i<k+1;i++){
+            var count= 0;
+            for(var j=0;j<studentClusterAssignment.length;j++){
+                if(studentClusterAssignment[j] == i){
+                    count= count+1;
+                }
+            }
+            numClustersArray.push(count);
+        }
+        console.log(numClustersArray);
     }
 
 });
