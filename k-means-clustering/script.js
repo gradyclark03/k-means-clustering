@@ -7,6 +7,7 @@ var subjectDistanceArray=[];
 var euclideanDistanceArray=[];
 var subjectsArray=[];
 var removedSubjectsArray=[];
+var numClustersArray=[];
 var currentAssign = 0;
 var nearestAssign = 0;
 var studentClusterAssignment=[];
@@ -137,6 +138,7 @@ $(document).ready(function(){
         console.log(unrefinedClustersArray);
 
         studentsInCluster();
+        bubbleGraph();
 
     })
 
@@ -349,7 +351,7 @@ $(document).ready(function(){
     }
 
     function studentsInCluster(){
-        var numClustersArray=[];
+        numClustersArray=[];
 
         for(var i=1;i<k+1;i++){
             var count= 0;
@@ -361,6 +363,58 @@ $(document).ready(function(){
             numClustersArray.push(count);
         }
         console.log(numClustersArray);
+    }
+    
+    function bubbleGraph(){
+        $('#bubbleContainer').html("");
+
+        for(var i=0;i<k;i++){
+            if(numClustersArray[i] != 0 && numClustersArray[i] >= 10 && numClustersArray[i]<20){
+                var rgb1=String(Math.floor(Math.random()*255));
+                var rgb2=String(Math.floor(Math.random()*255));
+                var rgb3=String(Math.floor(Math.random()*255));
+
+                $('#bubbleContainer').append("<span></span>").children().last().val(i+1).html(i+1).css({
+                "text-align":"center","width":(numClustersArray[i]*4)+"px","height":(numClustersArray[i]*4)+"px",
+                "border-radius":"50%","background-color":"rgb("+rgb1+","+rgb2+","+rgb3+")","float":"left",
+                "display":"inline-block","margin-right":"10px","line-height":(numClustersArray[i]*4)+"px",
+                "color":"white","font-size":(numClustersArray[i]*2)+"px",
+                "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"}) //https://stackoverflow.com/questions/4919076/outline-effect-to-text
+            }else if(numClustersArray[i] != 0 && numClustersArray[i]> 10){
+                var rgb1=String(Math.floor(Math.random()*255));
+                var rgb2=String(Math.floor(Math.random()*255));
+                var rgb3=String(Math.floor(Math.random()*255));
+
+                $('#bubbleContainer').append("<span></span>").children().last().val(i+1).html(i+1).css({
+                "text-align":"center","width":(numClustersArray[i]*4)+"px","height":(numClustersArray[i]*4)+"px",
+                "border-radius":"50%","background-color":"rgb("+rgb1+","+rgb2+","+rgb3+")","float":"left",
+                "display":"inline-block","margin-right":"10px","line-height":(numClustersArray[i]*4)+"px",
+                "color":"white","font-size":(numClustersArray[i])+"px",
+                "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"}) //https://stackoverflow.com/questions/4919076/outline-effect-to-text
+            }else if(numClustersArray[i] != 0 && numClustersArray[i]< 10 && numClustersArray[i] >= 3){
+                var rgb1=String(Math.floor(Math.random()*255));
+                var rgb2=String(Math.floor(Math.random()*255));
+                var rgb3=String(Math.floor(Math.random()*255));
+
+                $('#bubbleContainer').append("<span></span>").children().last().val(i+1).html(i+1).css({
+                "text-align":"center","width":(numClustersArray[i]*6)+"px","height":(numClustersArray[i]*6)+"px",
+                "border-radius":"50%","background-color":"rgb("+rgb1+","+rgb2+","+rgb3+")","float":"left",
+                "display":"inline-block","margin-right":"10px","line-height":(numClustersArray[i]*6)+"px",
+                "color":"white","font-size":(numClustersArray[i]*3)+"px",
+                "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"})
+            }else if(numClustersArray[i] != 0 && numClustersArray[i] <= 3){
+                var rgb1=String(Math.floor(Math.random()*255));
+                var rgb2=String(Math.floor(Math.random()*255));
+                var rgb3=String(Math.floor(Math.random()*255));
+
+                $('#bubbleContainer').append("<span></span>").children().last().val(i+1).html(i+1).css({
+                "text-align":"center","width":(numClustersArray[i]*10)+"px","height":(numClustersArray[i]*10)+"px",
+                "border-radius":"50%","background-color":"rgb("+rgb1+","+rgb2+","+rgb3+")","float":"left",
+                "display":"inline-block","margin-right":"10px","line-height":(numClustersArray[i]*10)+"px",
+                "color":"white","font-size":(numClustersArray[i]/1.5)+"px",
+                "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"})
+            }
+        }
     }
 
 });
