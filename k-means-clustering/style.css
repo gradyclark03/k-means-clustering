@@ -36,7 +36,17 @@
     float:left;
 }
 #bubbleContainer{
-    height:400px;
-    width:100%;
+    height:350px;
+    width:40%;
+    float:left;
+}
+#bubbleInfo{
+    height:180px;
+    width:35%;
+    float:left;
+}
+#studentInfo{
+    height:100px;
+    width:35%;
     float:left;
 }

@@ -16,6 +16,7 @@ var unrefinedClustersArray=[];
 var k=0;
 var unstable = 1;
 var iter = 0;
+var data;
 
 //this is the master
 
@@ -26,7 +27,6 @@ function student(studentNo,distances){
 
 
 $(document).ready(function(){
-    var data;
 
     $.ajax({
         
@@ -103,6 +103,7 @@ $(document).ready(function(){
     })
 
     $('#runAlgorithm').click(function(){
+
         console.clear();
         console.log(data); 
         unstable = 1;
@@ -113,6 +114,8 @@ $(document).ready(function(){
         studentsArray=[];
 
         $('#subjectsList').html("");
+        $('#bubbleInfo').html("");
+        $('#studentInfo').html("");
 
         for(var i=0;i<subjectsArray.length;i++){
             $("#subjectsList").append("<div></div>").children().last().html(subjectsArray[i]);
@@ -192,7 +195,8 @@ $(document).ready(function(){
                     clustersArray.push(tempClusterStudent);
                     refClustersArray.push(data[randomStudent-1]);
 
-                    $('#clusterContainer').append("<div></div>").children().last().html("Student "+randomStudent).css({"font-weight":"bold"})
+                    $('#clusterContainer').append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"})
+                    $('#clusterContainer').append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"})
                     for(var j=0;j<subjectsArray.length;j++){
                         if(clustersArray[i][j] == 1){
                             $('#clusterContainer').append("<div></div>").children().last().html(subjectsArray[j]);
@@ -224,7 +228,7 @@ $(document).ready(function(){
                 sum=0;
                 
                 for(var j=0;j<subjectsArray.length;j++){ 
-                    var clusterSubject=Math.pow( ( parseInt(clustersArray[x][j]) - parseInt(data[i][ subjectsArray[j] ]) ), 2); //x2-x1
+                    var clusterSubject=Math.pow( ( (clustersArray[x][j]) - parseInt(data[i][ subjectsArray[j] ]) ), 2); //x2-x1
                     subjectDistanceArray.push(clusterSubject);
                     
                 }
@@ -366,6 +370,7 @@ $(document).ready(function(){
     }
     
     function bubbleGraph(){
+
         $('#bubbleContainer').html("");
 
         for(var i=0;i<k;i++){
@@ -374,47 +379,81 @@ $(document).ready(function(){
                 var rgb2=String(Math.floor(Math.random()*255));
                 var rgb3=String(Math.floor(Math.random()*255));
 
-                $('#bubbleContainer').append("<span></span>").children().last().val(i+1).html(i+1).css({
+                $('#bubbleContainer').append("<div onClick=printBubble("+i+")></div>").children().last().html(i+1).css({
                 "text-align":"center","width":(numClustersArray[i]*4)+"px","height":(numClustersArray[i]*4)+"px",
                 "border-radius":"50%","background-color":"rgb("+rgb1+","+rgb2+","+rgb3+")","float":"left",
                 "display":"inline-block","margin-right":"10px","line-height":(numClustersArray[i]*4)+"px",
-                "color":"white","font-size":(numClustersArray[i]*2)+"px",
+                "color":"white","font-size":(1.7*(numClustersArray[i]))+"px", "z-index":"0",
                 "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"}) //https://stackoverflow.com/questions/4919076/outline-effect-to-text
             }else if(numClustersArray[i] != 0 && numClustersArray[i]> 10){
                 var rgb1=String(Math.floor(Math.random()*255));
                 var rgb2=String(Math.floor(Math.random()*255));
                 var rgb3=String(Math.floor(Math.random()*255));
 
-                $('#bubbleContainer').append("<span></span>").children().last().val(i+1).html(i+1).css({
+                $('#bubbleContainer').append("<div onClick=printBubble("+i+")></div>").children().last().html(i+1).css({
                 "text-align":"center","width":(numClustersArray[i]*4)+"px","height":(numClustersArray[i]*4)+"px",
                 "border-radius":"50%","background-color":"rgb("+rgb1+","+rgb2+","+rgb3+")","float":"left",
                 "display":"inline-block","margin-right":"10px","line-height":(numClustersArray[i]*4)+"px",
                 "color":"white","font-size":(numClustersArray[i])+"px",
-                "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"}) //https://stackoverflow.com/questions/4919076/outline-effect-to-text
+                "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"})
             }else if(numClustersArray[i] != 0 && numClustersArray[i]< 10 && numClustersArray[i] >= 3){
                 var rgb1=String(Math.floor(Math.random()*255));
                 var rgb2=String(Math.floor(Math.random()*255));
                 var rgb3=String(Math.floor(Math.random()*255));
 
-                $('#bubbleContainer').append("<span></span>").children().last().val(i+1).html(i+1).css({
+                $('#bubbleContainer').append("<div onClick=printBubble("+i+")></div>").children().last().html(i+1).css({
                 "text-align":"center","width":(numClustersArray[i]*6)+"px","height":(numClustersArray[i]*6)+"px",
                 "border-radius":"50%","background-color":"rgb("+rgb1+","+rgb2+","+rgb3+")","float":"left",
                 "display":"inline-block","margin-right":"10px","line-height":(numClustersArray[i]*6)+"px",
-                "color":"white","font-size":(numClustersArray[i]*3)+"px",
+                "color":"white","font-size":(numClustersArray[i]*2)+"px",
                 "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"})
-            }else if(numClustersArray[i] != 0 && numClustersArray[i] <= 3){
+            }else if(numClustersArray[i] == 3){
                 var rgb1=String(Math.floor(Math.random()*255));
                 var rgb2=String(Math.floor(Math.random()*255));
                 var rgb3=String(Math.floor(Math.random()*255));
 
-                $('#bubbleContainer').append("<span></span>").children().last().val(i+1).html(i+1).css({
+                $('#bubbleContainer').append("<div onClick=printBubble("+i+")></div>").children().last().html(i+1).css({
                 "text-align":"center","width":(numClustersArray[i]*10)+"px","height":(numClustersArray[i]*10)+"px",
                 "border-radius":"50%","background-color":"rgb("+rgb1+","+rgb2+","+rgb3+")","float":"left",
                 "display":"inline-block","margin-right":"10px","line-height":(numClustersArray[i]*10)+"px",
-                "color":"white","font-size":(numClustersArray[i]/1.5)+"px",
+                "color":"white","font-size":(numClustersArray[i]*2)+"px",
+                "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"})
+            }else if(numClustersArray[i] <= 2){
+                var rgb1=String(Math.floor(Math.random()*255));
+                var rgb2=String(Math.floor(Math.random()*255));
+                var rgb3=String(Math.floor(Math.random()*255));
+
+                $('#bubbleContainer').append("<div onClick=printBubble("+i+")></div>").children().last().html(i+1).css({
+                "text-align":"center","width":(numClustersArray[i]*15)+"px","height":(numClustersArray[i]*15)+"px",
+                "border-radius":"50%","background-color":"rgb("+rgb1+","+rgb2+","+rgb3+")","float":"left",
+                "display":"inline-block","margin-right":"10px","line-height":(numClustersArray[i]*15)+"px",
+                "color":"white","font-size":(numClustersArray[i]*8)+"px",
                 "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"})
             }
         }
     }
 
 });
+
+function printBubble(e){
+    $('#bubbleInfo').html("");
+    $('#studentInfo').html("");
+    $('#bubbleInfo').append("<div></div>").children().last().html("Total Number: "+ numClustersArray[e])
+    for(var i=0;i<studentClusterAssignment.length;i++){
+        if(studentClusterAssignment[i] == (e+1) ){
+            $('#bubbleInfo').append("<div onClick=printStudent("+i+")></div>").children().last().html((i+1)).css({"height":"10px","margin-right":"10px",
+            "margin-bottom":"10px","float":"left"});
+        }
+    }
+}
+
+function printStudent(e){
+    $('#studentInfo').html("");
+    $('#studentInfo').append("<div></div>").children().last().html("Student " +(e+1)).css({"font-weight":"bold"})
+    for(var i=0;i<subjectsArray.length;i++){
+        if( data[e][ subjectsArray[i] ] == "1"){
+            $('#studentInfo').append("<div></div>").children().last().html(subjectsArray[i]);
+            $('studentInfo').append("<br>")
+        }
+    }
+}
