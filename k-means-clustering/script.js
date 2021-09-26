@@ -13,6 +13,7 @@ var nearestAssign = 0;
 var studentClusterAssignment=[];
 var previousStudentClusterAssignment = [];
 var unrefinedClustersArray=[];
+var sortedClustersArray=[];
 var k=0;
 var unstable = 1;
 var iter = 0;
@@ -116,6 +117,7 @@ $(document).ready(function(){
         $('#subjectsList').html("");
         $('#bubbleInfo').html("");
         $('#studentInfo').html("");
+        $('#clusterDescription').html("");
 
         for(var i=0;i<subjectsArray.length;i++){
             $("#subjectsList").append("<div></div>").children().last().html(subjectsArray[i]);
@@ -138,9 +140,10 @@ $(document).ready(function(){
 
             calculateNewClusters();
         }
-        console.log(unrefinedClustersArray);
+        //console.log(unrefinedClustersArray);
 
         studentsInCluster();
+        clusterSorting();
         bubbleGraph();
 
     })
@@ -179,6 +182,9 @@ $(document).ready(function(){
                 var studentChecker=0;
 
                 var tempClusterStudent=[];
+                var clusterStudentID=[];
+
+                clusterStudentID.push(data[randomStudent-1]["ID:"])
 
                 for(var j=0;j<subjectsArray.length;j++){
                     tempClusterStudent.push( parseInt( data[randomStudent-1][ subjectsArray[j] ] ) );
@@ -212,6 +218,7 @@ $(document).ready(function(){
             }
         }
 
+        console.log(clusterStudentID);
         console.log(clustersArray);
         console.log(refClustersArray);
     }
@@ -366,7 +373,20 @@ $(document).ready(function(){
             }
             numClustersArray.push(count);
         }
-        console.log(numClustersArray);
+        //console.log(numClustersArray);
+    }
+
+    function clusterSorting(){
+        sortedClustersArray=[];
+
+        for(var i=0;i<clustersArray.length;i++){
+            const copyClusterArray = JSON.parse( JSON.stringify( clustersArray[i] ) ); //https://javascript.plainenglish.io/how-to-deep-copy-objects-and-arrays-in-javascript-7c911359b089
+            copyClusterArray.sort().reverse();
+            sortedClustersArray.push(copyClusterArray);
+        }
+
+        console.log(sortedClustersArray);
+
     }
     
     function bubbleGraph(){
@@ -430,6 +450,26 @@ $(document).ready(function(){
                 "color":"white","font-size":(numClustersArray[i]*8)+"px",
                 "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"})
             }
+            var currentCluster=clustersArray[i];
+            
+            $("#clusterDescription").append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
+
+            for(var j=0;j<4;j++){
+                var currentSubject = subjectsArray [ currentCluster.indexOf( sortedClustersArray[i][j] ) ];
+                if(currentSubject != previousSubject){
+                    $('#clusterDescription').append("<div></div>").children().last().html( subjectsArray [ currentCluster.indexOf( sortedClustersArray[i][j] ) ] );
+                    $('#clusterDescription').append("<br>");
+
+                    var previousSubject = subjectsArray [ currentCluster.indexOf( sortedClustersArray[i][j] ) ];
+                }else{
+                    $('#clusterDescription').append("<div></div>").children().last().html( subjectsArray [ (currentCluster.indexOf( sortedClustersArray[i][j] ) +1)  ] );
+                    $('#clusterDescription').append("<br>");
+
+                    var previousSubject = subjectsArray [ (currentCluster.indexOf( sortedClustersArray[i][j] ) +1)  ]
+                }
+            }
+            $('#clusterDescription').append("<br>");
+
         }
     }
 
