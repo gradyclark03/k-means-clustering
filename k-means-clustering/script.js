@@ -7,13 +7,15 @@ var subjectDistanceArray=[];
 var euclideanDistanceArray=[];
 var subjectsArray=[];
 var removedSubjectsArray=[];
-var numClustersArray=[];
+var studentsInClusterArray=[];
+var tempStudentArray=[];
 var currentAssign = 0;
 var nearestAssign = 0;
 var studentClusterAssignment=[];
 var previousStudentClusterAssignment = [];
 var unrefinedClustersArray=[];
-var sortedClustersArray=[];
+var sortedCountArray=[];
+var clusterSubjectCountArray = [];
 var k=0;
 var unstable = 1;
 var iter = 0;
@@ -113,6 +115,7 @@ $(document).ready(function(){
         checkSubjects();
 
         studentsArray=[];
+        studentsInClusterArray=[];
 
         $('#subjectsList').html("");
         $('#bubbleInfo').html("");
@@ -142,8 +145,9 @@ $(document).ready(function(){
         }
         //console.log(unrefinedClustersArray);
 
-        studentsInCluster();
-        clusterSorting();
+        countSubjects()
+        countSorting();
+
         bubbleGraph();
 
     })
@@ -361,114 +365,166 @@ $(document).ready(function(){
 
     }
 
-    function studentsInCluster(){
-        numClustersArray=[];
+    function countSubjects(){
 
-        for(var i=1;i<k+1;i++){
-            var count= 0;
+        for(var i=1;i<(k+1);i++){
+            tempStudentArray=[];
+
             for(var j=0;j<studentClusterAssignment.length;j++){
                 if(studentClusterAssignment[j] == i){
-                    count= count+1;
+                    tempStudentArray.push(j);   
                 }
             }
-            numClustersArray.push(count);
+
+            studentsInClusterArray.push(tempStudentArray);
         }
-        //console.log(numClustersArray);
+        console.log(studentsInClusterArray);
+
+        clusterSubjectCountArray = [];
+
+        for(var i=0;i<k;i++){
+            var selectedCluster = studentsInClusterArray[i]; 
+            var tempClusterCountArray=[];
+
+            for(var j=0;j<subjectsArray.length;j++){
+
+                var selectedSubject = subjectsArray[j];
+                var count = 0;
+
+                for(var l=0;l<selectedCluster.length;l++){
+                    var selectedStudent = selectedCluster[l];
+
+                    if(data[ selectedStudent ][ selectedSubject ] == "1"){
+                        count=count+1;
+                    }
+                }
+                tempClusterCountArray.push(count);
+
+            }
+            clusterSubjectCountArray.push(tempClusterCountArray);
+        }
+        console.log(clusterSubjectCountArray);
+        
     }
 
-    function clusterSorting(){
-        sortedClustersArray=[];
+    function countSorting(){
+        sortedCountArray=[];
 
-        for(var i=0;i<clustersArray.length;i++){
-            const copyClusterArray = JSON.parse( JSON.stringify( clustersArray[i] ) ); //https://javascript.plainenglish.io/how-to-deep-copy-objects-and-arrays-in-javascript-7c911359b089
-            copyClusterArray.sort().reverse();
-            sortedClustersArray.push(copyClusterArray);
+        for(var i=0;i<clusterSubjectCountArray.length;i++){
+            const copyClusterSubjectCountArray = JSON.parse( JSON.stringify( clusterSubjectCountArray[i] ) ); //https://javascript.plainenglish.io/how-to-deep-copy-objects-and-arrays-in-javascript-7c911359b089
+            copyClusterSubjectCountArray.sort((a,b) => b-a);
+            sortedCountArray.push(copyClusterSubjectCountArray);
         }
 
-        console.log(sortedClustersArray);
+        console.log(sortedCountArray);
 
     }
+
     
     function bubbleGraph(){
 
         $('#bubbleContainer').html("");
 
         for(var i=0;i<k;i++){
-            if(numClustersArray[i] != 0 && numClustersArray[i] >= 10 && numClustersArray[i]<20){
+            var selectedCluster= studentsInClusterArray[i].length;
+
+            if(selectedCluster != 0 && selectedCluster >= 10 && selectedCluster<20){
                 var rgb1=String(Math.floor(Math.random()*255));
                 var rgb2=String(Math.floor(Math.random()*255));
                 var rgb3=String(Math.floor(Math.random()*255));
 
                 $('#bubbleContainer').append("<div onClick=printBubble("+i+")></div>").children().last().html(i+1).css({
-                "text-align":"center","width":(numClustersArray[i]*4)+"px","height":(numClustersArray[i]*4)+"px",
+                "text-align":"center","width":(selectedCluster*4)+"px","height":(selectedCluster*4)+"px",
                 "border-radius":"50%","background-color":"rgb("+rgb1+","+rgb2+","+rgb3+")","float":"left",
-                "display":"inline-block","margin-right":"10px","line-height":(numClustersArray[i]*4)+"px",
-                "color":"white","font-size":(1.7*(numClustersArray[i]))+"px", "z-index":"0",
+                "display":"inline-block","margin-right":"10px","line-height":(selectedCluster*4)+"px",
+                "color":"white","font-size":(1.7*(selectedCluster))+"px", "z-index":"0",
                 "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"}) //https://stackoverflow.com/questions/4919076/outline-effect-to-text
-            }else if(numClustersArray[i] != 0 && numClustersArray[i]> 10){
+            }else if(selectedCluster != 0 && selectedCluster> 10){
                 var rgb1=String(Math.floor(Math.random()*255));
                 var rgb2=String(Math.floor(Math.random()*255));
                 var rgb3=String(Math.floor(Math.random()*255));
 
                 $('#bubbleContainer').append("<div onClick=printBubble("+i+")></div>").children().last().html(i+1).css({
-                "text-align":"center","width":(numClustersArray[i]*4)+"px","height":(numClustersArray[i]*4)+"px",
+                "text-align":"center","width":(selectedCluster*4)+"px","height":(selectedCluster*4)+"px",
                 "border-radius":"50%","background-color":"rgb("+rgb1+","+rgb2+","+rgb3+")","float":"left",
-                "display":"inline-block","margin-right":"10px","line-height":(numClustersArray[i]*4)+"px",
-                "color":"white","font-size":(numClustersArray[i])+"px",
+                "display":"inline-block","margin-right":"10px","line-height":(selectedCluster*4)+"px",
+                "color":"white","font-size":(selectedCluster)+"px",
                 "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"})
-            }else if(numClustersArray[i] != 0 && numClustersArray[i]< 10 && numClustersArray[i] >= 3){
+            }else if(selectedCluster != 0 && selectedCluster< 10 && selectedCluster >= 3){
                 var rgb1=String(Math.floor(Math.random()*255));
                 var rgb2=String(Math.floor(Math.random()*255));
                 var rgb3=String(Math.floor(Math.random()*255));
 
                 $('#bubbleContainer').append("<div onClick=printBubble("+i+")></div>").children().last().html(i+1).css({
-                "text-align":"center","width":(numClustersArray[i]*6)+"px","height":(numClustersArray[i]*6)+"px",
+                "text-align":"center","width":(selectedCluster*6)+"px","height":(selectedCluster*6)+"px",
                 "border-radius":"50%","background-color":"rgb("+rgb1+","+rgb2+","+rgb3+")","float":"left",
-                "display":"inline-block","margin-right":"10px","line-height":(numClustersArray[i]*6)+"px",
-                "color":"white","font-size":(numClustersArray[i]*2)+"px",
+                "display":"inline-block","margin-right":"10px","line-height":(selectedCluster*6)+"px",
+                "color":"white","font-size":(selectedCluster*2)+"px",
                 "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"})
-            }else if(numClustersArray[i] == 3){
+            }else if(selectedCluster == 3){
                 var rgb1=String(Math.floor(Math.random()*255));
                 var rgb2=String(Math.floor(Math.random()*255));
                 var rgb3=String(Math.floor(Math.random()*255));
 
                 $('#bubbleContainer').append("<div onClick=printBubble("+i+")></div>").children().last().html(i+1).css({
-                "text-align":"center","width":(numClustersArray[i]*10)+"px","height":(numClustersArray[i]*10)+"px",
+                "text-align":"center","width":(selectedCluster*10)+"px","height":(selectedCluster*10)+"px",
                 "border-radius":"50%","background-color":"rgb("+rgb1+","+rgb2+","+rgb3+")","float":"left",
-                "display":"inline-block","margin-right":"10px","line-height":(numClustersArray[i]*10)+"px",
-                "color":"white","font-size":(numClustersArray[i]*2)+"px",
+                "display":"inline-block","margin-right":"10px","line-height":(selectedCluster*10)+"px",
+                "color":"white","font-size":(selectedCluster*2)+"px",
                 "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"})
-            }else if(numClustersArray[i] <= 2){
+            }else if(selectedCluster <= 2){
                 var rgb1=String(Math.floor(Math.random()*255));
                 var rgb2=String(Math.floor(Math.random()*255));
                 var rgb3=String(Math.floor(Math.random()*255));
 
                 $('#bubbleContainer').append("<div onClick=printBubble("+i+")></div>").children().last().html(i+1).css({
-                "text-align":"center","width":(numClustersArray[i]*15)+"px","height":(numClustersArray[i]*15)+"px",
+                "text-align":"center","width":(selectedCluster*15)+"px","height":(selectedCluster*15)+"px",
                 "border-radius":"50%","background-color":"rgb("+rgb1+","+rgb2+","+rgb3+")","float":"left",
-                "display":"inline-block","margin-right":"10px","line-height":(numClustersArray[i]*15)+"px",
-                "color":"white","font-size":(numClustersArray[i]*8)+"px",
+                "display":"inline-block","margin-right":"10px","line-height":(selectedCluster*15)+"px",
+                "color":"white","font-size":(selectedCluster*8)+"px",
                 "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"})
             }
-            var currentCluster=clustersArray[i];
+
+            $('#clusterDescription').append("<div></div>").children().last().attr("id","cluster"+(i+1)).css({"height":"100%","width":"33%","float":"left"});
             
-            $("#clusterDescription").append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
+            $("#clusterDescription").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
 
-            for(var j=0;j<4;j++){
-                var currentSubject = subjectsArray [ currentCluster.indexOf( sortedClustersArray[i][j] ) ];
+            var previousSubject;
+
+            for(var j=0;j<4;j++){   
+                var currentSubject = subjectsArray[ clusterSubjectCountArray[i].indexOf( sortedCountArray[i][j] ) ];
+
                 if(currentSubject != previousSubject){
-                    $('#clusterDescription').append("<div></div>").children().last().html( subjectsArray [ currentCluster.indexOf( sortedClustersArray[i][j] ) ] );
-                    $('#clusterDescription').append("<br>");
+                    $('#clusterDescription').children().last().append("<br>");
+                    $('#clusterDescription').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] );
 
-                    var previousSubject = subjectsArray [ currentCluster.indexOf( sortedClustersArray[i][j] ) ];
+                    previousSubject= currentSubject;
                 }else{
-                    $('#clusterDescription').append("<div></div>").children().last().html( subjectsArray [ (currentCluster.indexOf( sortedClustersArray[i][j] ) +1)  ] );
-                    $('#clusterDescription').append("<br>");
+      
+                    var tempCountSubjectArray=[];
+                    
+                    for(var l=0;l<clusterSubjectCountArray[i].length;l++){
 
-                    var previousSubject = subjectsArray [ (currentCluster.indexOf( sortedClustersArray[i][j] ) +1)  ]
+                        if(sortedCountArray[i][j] == clusterSubjectCountArray[i][l]){ // 5
+
+                            tempCountSubjectArray.push(l);
+                        }
+                    }
+                    console.log((i+1));
+                    console.log(tempCountSubjectArray);
+                    
+                    for(var l=0;l<tempCountSubjectArray.length;l++){
+                        currentSubject = subjectsArray[ tempCountSubjectArray[l+1] ] ;
+                        l=tempCountSubjectArray.length;
+                    }
+
+                    $('#clusterDescription').children().last().append("<br>");
+                    $('#clusterDescription').children().last().append("<div></div>").children().last().html( currentSubject + " - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] );
+
+                    previousSubject= currentSubject;
                 }
+
             }
-            $('#clusterDescription').append("<br>");
 
         }
     }
@@ -478,12 +534,15 @@ $(document).ready(function(){
 function printBubble(e){
     $('#bubbleInfo').html("");
     $('#studentInfo').html("");
-    $('#bubbleInfo').append("<div></div>").children().last().html("Total Number: "+ numClustersArray[e])
-    for(var i=0;i<studentClusterAssignment.length;i++){
-        if(studentClusterAssignment[i] == (e+1) ){
-            $('#bubbleInfo').append("<div onClick=printStudent("+i+")></div>").children().last().html((i+1)).css({"height":"10px","margin-right":"10px",
+
+    var selectedCluster= studentsInClusterArray[e];
+
+    $('#bubbleInfo').append("<div></div>").children().last().html("Total Number: "+ selectedCluster.length)
+    for(var i=0;i<selectedCluster.length;i++){
+        
+            $('#bubbleInfo').append("<div onClick=printStudent("+selectedCluster[i]+")></div>").children().last().html( (selectedCluster[i]+1) ).css({"height":"10px","margin-right":"10px",
             "margin-bottom":"10px","float":"left"});
-        }
+
     }
 }
 
