@@ -10,21 +10,36 @@
 </head>
 <body>
 <div id="container">
-    <div id="kMeansContainer">
-        <input type="number" id="kNumber" value="3"></input>
-        <!--<button id="generateClusters">generateClusters</button>
-        <button id="generateDistances">generateDistances</button>-->
-        <button id="runAlgorithm">runAlgorithm</button>
-        <!--<button id="selectedSubjects">selectedSubjects</button>-->
-        <br><br>
-        <div id="radioContainer"></div>
-        <div id="subjectsList"></div>
-        <div id="clusterContainer"></div>
+    <div id="topContainer">
+        <div id="radioContainer">
+            <div id="radioContainerHeading">Subject Selection</div>
+            <div id="leftRadioContainer"></div>
+            <div id="rightRadioContainer"></div>
+        </div>
+        <div id="subjectsList">
+            <div id="subjectsListHeading">Selected Subjects</div>
+            <div id="leftSubjectsList"></div>
+            <div id="rightSubjectsList"></div>
+        </div>
+        <div id="clusterContainer">
+            <div id="clusterContainerHeading">Randomly Chosen Clusters</div>
+            <div id="clusterInnerContainer"></div>
+        </div>
+        <div id="parametersContainer">
+            <input type="number" id="kNumber" value="3"></input>
+            <!--<button id="generateClusters">generateClusters</button>
+            <button id="generateDistances">generateDistances</button>-->
+            <button id="runAlgorithm">runAlgorithm</button>
+            <!--<button id="selectedSubjects">selectedSubjects</button>-->
+        </div>
+        <div id="bubbleContainer"></div>
+        <div id="clusterDescription"></div>
     </div>
-    <div id="bubbleContainer"></div>
-    <div id="bubbleInfo"></div>
-    <div id="studentInfo"></div>
-    <div id="clusterDescription"></div>
+
+    <div id="bottomContainer">
+        <div id="bubbleInfo"></div>
+        <div id="studentInfo"></div>
+    </div>
 </div>
 
 </body>

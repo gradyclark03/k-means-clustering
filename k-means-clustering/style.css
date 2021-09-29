@@ -11,36 +11,123 @@
 #runAlgorithm{
     float:left;
 }
+
 #radioContainer{
-    width:200px;
-    height:600px;
+    width:390px;
+    height:300px;
     float:left;
+    border:2px solid black;
 }
+#radioContainerHeading{
+    width:100%;
+    height:7%;
+    float:left;
+    border: 2px black solid;
+    text-align:center;
+    font-weight:bold;
+    font-size: 20px;;
+}
+#leftRadioContainer{
+    width:48.9%;
+    height:90%;
+    float:left;
+    border:2px solid black;
+}
+#rightRadioContainer{
+    width:48.9%;
+    height:90%;
+    float:left;
+    border:2px solid black;
+}
+
 #subjectsList{
-    height:600px;
-    width:200px;
+    height:300px;
+    width:390px;
     float:left;
+    border:2px solid black;
 }
+#subjectsListHeading{
+    width:100%;
+    height:7%;
+    float:left;
+    border: 2px black solid;
+    text-align:center;
+    font-weight:bold;
+    font-size: 20px;;
+
+}
+#leftSubjectsList{
+    width:48.85%;
+    height:90%;
+    float:left;
+    border:2px solid black;
+}
+#rightSubjectsList{
+    width:48.85%;
+    height:90%;
+    float:left;
+    border:2px solid black;
+}
+
 #clusterContainer{
-    height:600px;
-    width:200px;
+    height:300px;
+    width:390px;
     float:left;
+    border:2px solid black;
 }
+#clusterContainerHeading{
+    width:99%;
+    height:7%;
+    float:left;
+    border: 2px black solid;
+    text-align:center;
+    font-weight:bold;
+    font-size: 20px;;
+}
+#clusterInnerContainer{
+    width:99%;
+    height:89.95%;
+    float:left;
+    border:2px solid black;
+}
+
 #container{
+    padding-left:20px;
     height:1500px;
     width:100%;
 }
-#kMeansContainer{
-    height:600px;
+#topContainer{
+    height:710px;
     width:100%;
     float:left;
+    border:2px solid black;
 }
+#parametersContainer{
+    height:50px;
+    width:54.5%;
+    float:left;
+    border:2px solid black;
+    padding-left: 40%;
+    padding-top: 20px;;
+}
+#bottomContainer{
+    margin-top:5px;
+    width:82%;
+    float:left;
+    height:200px;
+    border:2px solid black;
+    padding-left:18%;
+}
+
 #bubbleContainer{
-    height:300px;
+    padding-top: 50px;
+    padding-left:70px;
+    height:280px;
     width:40%;
     float:left;
     border:2px solid black;
 }
+
 #bubbleInfo{
     height:130px;
     width:35%;
@@ -48,15 +135,15 @@
     border:2px solid black;
 }
 #studentInfo{
-    height:110px;
+    height:130px;
     width:35%;
     float:left;
     border:2px solid black;
     margin-bottom:56px;
 }
 #clusterDescription{
-    height:200px;
-    width:60%;
+    height:330px;
+    width:605px;
     float:left;
     border:2px solid black;
 }
