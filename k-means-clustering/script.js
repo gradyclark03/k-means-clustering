@@ -16,6 +16,7 @@ var previousStudentClusterAssignment = [];
 var unrefinedClustersArray=[];
 var sortedCountArray=[];
 var clusterSubjectCountArray = [];
+var subjectCountArray=[];
 var k=0;
 var unstable = 1;
 var iter = 0;
@@ -121,10 +122,6 @@ $(document).ready(function(){
         $('#bubbleInfo').html("");
         $('#studentInfo').html("");
         $('#clusterDescription').html("");
-
-        for(var i=0;i<subjectsArray.length;i++){
-            $("#subjectsList").append("<div></div>").children().last().html(subjectsArray[i]);
-        }
 
         k=parseInt( $('#kNumber').val() );
         if( $('#kNumber').val() == "" ){
@@ -366,6 +363,25 @@ $(document).ready(function(){
     }
 
     function countSubjects(){
+        subjectCountArray=[];
+
+        for(var i=0;i<subjectsArray.length;i++){
+            var count=0;
+
+            for(var j=0;j<data.length;j++){
+
+                if(data[j][ subjectsArray[i] ] == "1"){
+                    count=count+1;
+                }
+            }
+            subjectCountArray.push(count);
+        }
+
+        console.log(subjectCountArray);
+
+        for(var i=0;i<subjectsArray.length;i++){
+            $("#subjectsList").append("<div></div>").children().last().html(subjectsArray[i] + " - "+ subjectCountArray[i] );
+        }
 
         for(var i=1;i<(k+1);i++){
             tempStudentArray=[];
@@ -489,7 +505,7 @@ $(document).ready(function(){
             
             $("#clusterDescription").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
 
-            var previousSubject;
+            var previousSubject=0;;
 
             for(var j=0;j<4;j++){   
                 var currentSubject = subjectsArray[ clusterSubjectCountArray[i].indexOf( sortedCountArray[i][j] ) ];
