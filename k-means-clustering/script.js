@@ -232,11 +232,20 @@ $(document).ready(function(){
                 if(k<=3){
                     $('#clusterInnerContainer').append("<div></div>").children().last().css({"width":(100/(k))+"%","height":"200px","float":"left"});
                 }else{
-                    if(i<=2){
-                        $('#clusterInnerContainer1').append("<div></div>").children().last().css({"width":(100/(Math.ceil(k/2)))+"%","height":"200px","float":"left"});
+
+                    if(k == 4){
+                        if(i<=1){
+                            $('#clusterInnerContainer1').append("<div></div>").children().last().css({"width":(100/(Math.ceil(k/2)))+"%","height":"200px","float":"left"});
+                        }else{
+                            $('#clusterInnerContainer2').append("<div></div>").children().last().css({"width":(100/(Math.floor(k/2)))+"%","height":"200px","float":"left"});
+                        }    
                     }else{
-                        $('#clusterInnerContainer2').append("<div></div>").children().last().css({"width":(100/(Math.floor(k/2)))+"%","height":"200px","float":"left"});
-                    }                                                                                           
+                        if(i<=2){
+                            $('#clusterInnerContainer1').append("<div></div>").children().last().css({"width":(100/(Math.ceil(k/2)))+"%","height":"200px","float":"left"});
+                        }else{
+                            $('#clusterInnerContainer2').append("<div></div>").children().last().css({"width":(100/(Math.floor(k/2)))+"%","height":"200px","float":"left"});
+                        }    
+                    }                                                                              
                 }
 
 
@@ -249,13 +258,24 @@ $(document).ready(function(){
                         $('#clusterInnerContainer').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
                         $('#clusterInnerContainer').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
                     }else{
-                        if(i<=2){
-                            $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
-                            $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
+
+                        if(k==4){
+                            if(i<=1){
+                                $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
+                                $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
+                            }else{
+                                $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
+                                $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
+                            }
                         }else{
-                            $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
-                            $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
-                        }   
+                            if(i<=2){
+                                $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
+                                $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
+                            }else{
+                                $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
+                                $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
+                            }
+                        } 
                     }
 
                     for(var j=0;j<subjectsArray.length;j++){
@@ -263,12 +283,20 @@ $(document).ready(function(){
                             if(k<=3){
                                 $('#clusterInnerContainer').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
                             }else{
-                                if(i<=2){
-                                    $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
-                                }else{
-                                    $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
-                                }   
 
+                                if(k==4){
+                                    if(i<=1){
+                                        $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
+                                    }else{
+                                        $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
+                                    }       
+                                }else{
+                                    if(i<=2){
+                                        $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
+                                    }else{
+                                        $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
+                                    }   
+                                }
                             }
                         }
                     }
@@ -578,16 +606,31 @@ $(document).ready(function(){
                 $("#clusterDescription").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
                 $('#clusterDescription').children().last().append("<br>");
             }else{
-                if(i<=2){
-                    $('#clusterDescription1').append("<div></div>").children().last().attr("id","cluster"+(i+1)).css({"height":"100%","width":(100/(Math.ceil(k/2)))+"%","float":"left"});
-            
-                    $("#clusterDescription1").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
-                    $('#clusterDescription1').children().last().append("<br>");
+
+                if(k == 4){
+                    if(i<= 1){
+                        $('#clusterDescription1').append("<div></div>").children().last().attr("id","cluster"+(i+1)).css({"height":"100%","width":(100/(Math.ceil(k/2)))+"%","float":"left"});
+                
+                        $("#clusterDescription1").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
+                        $('#clusterDescription1').children().last().append("<br>");
+                    }else{
+                        $('#clusterDescription2').append("<div></div>").children().last().attr("id","cluster"+(i+1)).css({"height":"100%","width":(100/(Math.floor(k/2)))+"%","float":"left"});
+                
+                        $("#clusterDescription2").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
+                        $('#clusterDescription2').children().last().append("<br>");
+                    }
                 }else{
-                    $('#clusterDescription2').append("<div></div>").children().last().attr("id","cluster"+(i+1)).css({"height":"100%","width":(100/(Math.floor(k/2)))+"%","float":"left"});
-            
-                    $("#clusterDescription2").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
-                    $('#clusterDescription2').children().last().append("<br>");
+                    if(i<= 2){
+                        $('#clusterDescription1').append("<div></div>").children().last().attr("id","cluster"+(i+1)).css({"height":"100%","width":(100/(Math.ceil(k/2)))+"%","float":"left"});
+                
+                        $("#clusterDescription1").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
+                        $('#clusterDescription1').children().last().append("<br>");
+                    }else{
+                        $('#clusterDescription2').append("<div></div>").children().last().attr("id","cluster"+(i+1)).css({"height":"100%","width":(100/(Math.floor(k/2)))+"%","float":"left"});
+                
+                        $("#clusterDescription2").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
+                        $('#clusterDescription2').children().last().append("<br>");
+                    }
                 }
             }
 
@@ -600,10 +643,18 @@ $(document).ready(function(){
                     if(k<=3){
                         $('#clusterDescription').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
                     }else{
-                        if(i<=2){
-                            $('#clusterDescription1').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                        if(k==4){
+                            if(i<=1){
+                                $('#clusterDescription1').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                            }else{
+                                $('#clusterDescription2').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                            }
                         }else{
-                            $('#clusterDescription2').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                            if(i<=2){
+                                $('#clusterDescription1').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                            }else{
+                                $('#clusterDescription2').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                            }
                         }
                     }
 
@@ -629,10 +680,18 @@ $(document).ready(function(){
                     if(k<=3){
                         $('#clusterDescription').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
                     }else{
-                        if(i<=2){
-                            $('#clusterDescription1').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                        if(k==4){
+                            if(i<=1){
+                                $('#clusterDescription1').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                            }else{
+                                $('#clusterDescription2').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                            }
                         }else{
-                            $('#clusterDescription2').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                            if(i<=2){
+                                $('#clusterDescription1').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                            }else{
+                                $('#clusterDescription2').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                            }
                         }
                     }
 
