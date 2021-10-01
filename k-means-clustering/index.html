@@ -10,6 +10,7 @@
 </head>
 <body>
 <div id="container">
+    <div id="heading">2021 Subject Selection</div>
     <div id="topContainer">
         <div id="radioContainer">
             <div id="radioContainerHeading">Subject Selection</div>
@@ -26,7 +27,8 @@
             <div id="clusterInnerContainer"></div>
         </div>
         <div id="parametersContainer">
-            <input type="number" id="kNumber" value="3"></input>
+            <input type="number" id="kNumber" value="3" min="2" max="5"></input>
+            <input type="number" id="subjectNumber" value="4" min="0" max="5"></input>
             <!--<button id="generateClusters">generateClusters</button>
             <button id="generateDistances">generateDistances</button>-->
             <button id="runAlgorithm">runAlgorithm</button>

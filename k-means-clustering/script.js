@@ -636,7 +636,9 @@ $(document).ready(function(){
 
             var previousSubject=0;;
 
-            for(var j=0;j<4;j++){   
+            var subjectNumber = $('#subjectNumber').val();
+
+            for(var j=0;j<subjectNumber;j++){   
                 var currentSubject = subjectsArray[ clusterSubjectCountArray[i].indexOf( sortedCountArray[i][j] ) ];
 
                 if(currentSubject != previousSubject){
@@ -711,7 +713,9 @@ function printBubble(e){
 
     var selectedCluster= studentsInClusterArray[e];
 
-    $('#bubbleInfo').append("<div></div>").children().last().html("Total Number: "+ selectedCluster.length)
+    $('#bubbleInfo').append("<div></div>").children().last().html("Cluster "+(e+1)).css({"font-weight":"bold","float":"left","margin-right":"20px"});
+    $('#bubbleInfo').append("<div></div>").children().last().html("Total Number: "+ selectedCluster.length).css({"float":"left"});
+    $('#bubbleInfo').append("<br>")
     for(var i=0;i<selectedCluster.length;i++){
         
             $('#bubbleInfo').append("<div onClick=printStudent("+selectedCluster[i]+")></div>").children().last().html( (selectedCluster[i]+1) ).css({"height":"10px","margin-right":"10px",
