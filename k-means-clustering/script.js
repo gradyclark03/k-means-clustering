@@ -21,6 +21,7 @@ var k=0;
 var unstable = 1;
 var iter = 0;
 var data;
+var printedStudentInfo=0;
 
 //this is the master
 
@@ -171,6 +172,7 @@ $(document).ready(function(){
         countSubjects()
         countSorting();
 
+        printedStudentInfo=0;
         bubbleGraph();
 
     })
@@ -709,7 +711,6 @@ $(document).ready(function(){
 
 function printBubble(e){
     $('#bubbleInfo').html("");
-    $('#studentInfo').html("");
 
     var selectedCluster= studentsInClusterArray[e];
 
@@ -722,15 +723,58 @@ function printBubble(e){
             "margin-bottom":"10px","float":"left"});
 
     }
+    
+    if( printedStudentInfo == 0){
+
+        for(var i=1;i<3;i++){
+            $('#studentInfo').append("<div></div>").children().last().attr("id","student"+i).css({"height":"99%","width":"140px","border":"2px black solid","float":"left"});
+            $("#student"+i).append("<div></div>").children().last().attr("id","student"+i+"Container").css({"height":"78%","width":"98%","border":"2px black solid","margin-bottom":"5px"});
+            $('#student'+i).append("<input type='checkbox'>Student "+i+"</input>").children().last().attr("id","checkboxStudent"+i);
+        }
+        $('#checkboxStudent1').prop("checked",true);
+        $('#studentInfo').append("<button>Clear</button>").children().last().attr("id","studentClearButton").css({"width":"50px","height":"20px","float":"left","margin-top":"125px"});
+
+        printedStudentInfo=1;
+    }
+
+    $('#checkboxStudent1').click(function(){
+
+        $('#checkboxStudent2').prop("checked",false);
+    })
+    
+    $('#checkboxStudent2').click(function(){
+        
+        $('#checkboxStudent1').prop("checked",false);
+    })
+
+    $('#studentClearButton').click(function(){
+        $('#student1Container').html("");
+        $('#student2Container').html("");
+    })
+
 }
 
 function printStudent(e){
-    $('#studentInfo').html("");
-    $('#studentInfo').append("<div></div>").children().last().html("Student " +(e+1)).css({"font-weight":"bold"})
-    for(var i=0;i<subjectsArray.length;i++){
-        if( data[e][ subjectsArray[i] ] == "1"){
-            $('#studentInfo').append("<div></div>").children().last().html(subjectsArray[i]);
-            $('studentInfo').append("<br>")
+    if( $('#checkboxStudent1').prop("checked") == true ){
+
+        $('#student1Container').html("");
+        $('#student1Container').append("<div></div>").children().last().html("Student " +(e+1)).css({"font-weight":"bold","margin-top":"10px"});
+
+        for(var i=0;i<subjectsArray.length;i++){
+            if( data[e][ subjectsArray[i] ] == "1"){
+                $('#student1Container').append("<div></div>").children().last().html(subjectsArray[i]);
+            }
+        }
+    }else if( $('#checkboxStudent2').prop("checked") == true ){
+
+        $('#student2Container').html("");
+        $('#student2Container').append("<div></div>").children().last().html("Student " +(e+1)).css({"font-weight":"bold","margin-top":"10px"});
+
+        for(var i=0;i<subjectsArray.length;i++){
+            if( data[e][ subjectsArray[i] ] == "1"){
+                $('#student2Container').append("<div></div>").children().last().html(subjectsArray[i]);
+            }
         }
     }
+
 }
