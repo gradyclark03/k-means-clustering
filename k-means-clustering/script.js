@@ -202,7 +202,7 @@ $(document).ready(function(){
         }
 
         for(var i=0;i<k;i++){
-            var randomStudent=Math.floor(Math.random()*88); 
+            var randomStudent=Math.ceil(Math.random()*88); 
 
             unrefinedClustersArray.push(randomStudent);
 
@@ -217,7 +217,7 @@ $(document).ready(function(){
                 var tempClusterStudent=[];
                 var clusterStudentID=[];
 
-                clusterStudentID.push(data[randomStudent-1]["ID:"])
+                clusterStudentID.push(data[randomStudent-1]["ID:"]);
 
                 for(var j=0;j<subjectsArray.length;j++){
                     tempClusterStudent.push( parseInt( data[randomStudent-1][ subjectsArray[j] ] ) );
