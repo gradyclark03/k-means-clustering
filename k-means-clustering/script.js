@@ -35,7 +35,7 @@ $(document).ready(function(){
 
     $.ajax({
         
-        url:"Year 12 Subject Choices 2021.csv", dataType:"text", async: false,
+        url:"Year 12 Subject Choices 2020.csv", dataType:"text", async: false,
         success: function(result){
             
             var JSONfile = csvJSON(result);
@@ -71,7 +71,7 @@ $(document).ready(function(){
       //return result; //JavaScript object
       return JSON.stringify(result); //JSON
     }
-    
+
     // start of new branch
     
     console.log(data);
@@ -206,7 +206,7 @@ $(document).ready(function(){
         }
 
         for(var i=0;i<k;i++){
-            var randomStudent=Math.ceil(Math.random()*88); 
+            var randomStudent=Math.ceil(Math.random()*(data.length)); 
 
             unrefinedClustersArray.push(randomStudent);
 
