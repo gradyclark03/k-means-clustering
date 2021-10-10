@@ -538,7 +538,7 @@ $(document).ready(function(){
 
         if(k>3){
             for(var i=0;i<2;i++){
-                $('#clusterDescription').append("<div></div>").children().last().attr("id","clusterDescription"+(i+1)).css({"width":"100%","height":"49%","float":"left","border":"2px solid black"})
+                $('#clusterDescription').append("<div></div>").children().last().attr("id","clusterDescription"+(i+1)).css({"width":"100%","height":"49%","float":"left","border":"2px solid black"});
             }
         }
 
@@ -604,34 +604,29 @@ $(document).ready(function(){
 
             if(k<=3){
                 $('#clusterDescription').append("<div></div>").children().last().attr("id","cluster"+(i+1)).css({"height":"100%","width":(100/k)+"%","float":"left"});
-            
-                $("#clusterDescription").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
-                $('#clusterDescription').children().last().append("<br>");
+                
+                $("#clusterDescription").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold","margin-bottom":"7px"});
             }else{
 
                 if(k == 4){
                     if(i<= 1){
                         $('#clusterDescription1').append("<div></div>").children().last().attr("id","cluster"+(i+1)).css({"height":"100%","width":(100/(Math.ceil(k/2)))+"%","float":"left"});
                 
-                        $("#clusterDescription1").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
-                        $('#clusterDescription1').children().last().append("<br>");
+                        $("#clusterDescription1").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold","margin-bottom":"7px"});
                     }else{
                         $('#clusterDescription2').append("<div></div>").children().last().attr("id","cluster"+(i+1)).css({"height":"100%","width":(100/(Math.floor(k/2)))+"%","float":"left"});
                 
-                        $("#clusterDescription2").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
-                        $('#clusterDescription2').children().last().append("<br>");
+                        $("#clusterDescription2").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold","margin-bottom":"7px"});
                     }
                 }else{
                     if(i<= 2){
                         $('#clusterDescription1').append("<div></div>").children().last().attr("id","cluster"+(i+1)).css({"height":"100%","width":(100/(Math.ceil(k/2)))+"%","float":"left"});
                 
-                        $("#clusterDescription1").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
-                        $('#clusterDescription1').children().last().append("<br>");
+                        $("#clusterDescription1").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold","margin-bottom":"7px"});
                     }else{
                         $('#clusterDescription2').append("<div></div>").children().last().attr("id","cluster"+(i+1)).css({"height":"100%","width":(100/(Math.floor(k/2)))+"%","float":"left"});
                 
-                        $("#clusterDescription2").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold"});
-                        $('#clusterDescription2').children().last().append("<br>");
+                        $("#clusterDescription2").children().last().append("<div></div>").children().last().html("Cluster: "+(i+1)).css({"font-weight":"bold","margin-bottom":"7px"});
                     }
                 }
             }
@@ -681,6 +676,7 @@ $(document).ready(function(){
                         currentSubject = subjectsArray[ tempCountSubjectArray[l+1] ] ;
                         l=tempCountSubjectArray.length;
                     }
+
                     if(k<=3){
                         $('#clusterDescription').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
                     }else{
@@ -727,7 +723,7 @@ function printBubble(e){
     if( printedStudentInfo == 0){
 
         for(var i=1;i<3;i++){
-            $('#studentInfo').append("<div></div>").children().last().attr("id","student"+i).css({"height":"99%","width":"140px","border":"2px black solid","float":"left"});
+            $('#studentInfo').append("<div></div>").children().last().attr("id","student"+i).css({"height":"99%","width":"150px","border":"2px black solid","float":"left"});
             $("#student"+i).append("<div></div>").children().last().attr("id","student"+i+"Container").css({"height":"78%","width":"98%","border":"2px black solid","margin-bottom":"5px"});
             $('#student'+i).append("<input type='checkbox'>Student "+i+"</input>").children().last().attr("id","checkboxStudent"+i);
         }
