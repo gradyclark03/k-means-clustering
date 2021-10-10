@@ -71,6 +71,7 @@ $(document).ready(function(){
       //return result; //JavaScript object
       return JSON.stringify(result); //JSON
     }
+    // start of new branch
     
     console.log(data);
     subjectsArray = Object.keys(data[0]);
