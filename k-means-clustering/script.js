@@ -24,6 +24,7 @@ var data;
 var printedStudentInfo=0;
 
 //this is the master
+//2020 dataset branched off
 
 function student(studentNo,distances){
     this.studentNumber = studentNo;
@@ -204,7 +205,7 @@ $(document).ready(function(){
         }
 
         for(var i=0;i<k;i++){
-            var randomStudent=Math.ceil(Math.random()*88); 
+            var randomStudent=Math.ceil(Math.random()*(data.length)); 
 
             unrefinedClustersArray.push(randomStudent);
 
