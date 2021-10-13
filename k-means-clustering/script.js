@@ -632,14 +632,14 @@ $(document).ready(function(){
                 }
             }
 
-            var previousSubject=0;;
+            var previousSubjectArray=[];
 
             var subjectNumber = $('#subjectNumber').val();
 
             for(var j=0;j<subjectNumber;j++){   
                 var currentSubject = subjectsArray[ clusterSubjectCountArray[i].indexOf( sortedCountArray[i][j] ) ];
 
-                if(currentSubject != previousSubject){
+                if(previousSubjectArray.includes(currentSubject) == false){
                     if(k<=3){
                         $('#clusterDescription').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
                     }else{
@@ -658,7 +658,7 @@ $(document).ready(function(){
                         }
                     }
 
-                    previousSubject= currentSubject;
+                    previousSubjectArray.push(currentSubject);
                 }else{
       
                     var tempCountSubjectArray=[];
@@ -672,10 +672,21 @@ $(document).ready(function(){
                     }
                     console.log((i+1));
                     console.log(tempCountSubjectArray);
-                    
-                    for(var l=0;l<tempCountSubjectArray.length;l++){
-                        currentSubject = subjectsArray[ tempCountSubjectArray[l+1] ] ;
-                        l=tempCountSubjectArray.length;
+                    var alreadyDisplayed=0;
+
+                    while(alreadyDisplayed == 0){
+                        for(var l=0;l<tempCountSubjectArray.length;l++){
+                            currentSubject = subjectsArray[ tempCountSubjectArray[l+1] ] ;
+
+                            if(previousSubjectArray.includes(currentSubject) == true){
+                                currentSubject = subjectsArray[ tempCountSubjectArray[l+1] ]    
+
+                            }else{
+                                l=tempCountSubjectArray.length;       
+                                alreadyDisplayed=1;
+                            }
+
+                        }
                     }
 
                     if(k<=3){
@@ -696,7 +707,7 @@ $(document).ready(function(){
                         }
                     }
 
-                    previousSubject= currentSubject;
+                    previousSubjectArray.push(currentSubject);
                 }
 
             }
