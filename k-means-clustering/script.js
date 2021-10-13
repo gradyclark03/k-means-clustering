@@ -635,6 +635,10 @@ $(document).ready(function(){
             var previousSubjectArray=[];
 
             var subjectNumber = $('#subjectNumber').val();
+            
+            if(subjectNumber>6){
+                subjectNumber=6;
+            }
 
             for(var j=0;j<subjectNumber;j++){   
                 var currentSubject = subjectsArray[ clusterSubjectCountArray[i].indexOf( sortedCountArray[i][j] ) ];
