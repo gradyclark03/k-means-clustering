@@ -9,6 +9,7 @@ var subjectsArray=[];
 var removedSubjectsArray=[];
 var studentsInClusterArray=[];
 var tempStudentArray=[];
+var selectedStudentsArray=[];
 var currentAssign = 0;
 var nearestAssign = 0;
 var studentClusterAssignment=[];
@@ -76,7 +77,6 @@ $(document).ready(function(){
     console.log(data);
     subjectsArray = Object.keys(data[0]);
     subjectsArray.shift();
-    subjectsArray.pop();
 
     for(var i=0;i<subjectsArray.length;i++){
 
@@ -138,11 +138,12 @@ $(document).ready(function(){
         console.log(data); 
         unstable = 1;
         iter = 0;  
-
-        checkSubjects();
-
+        selectedStudentsArray=[];
         studentsArray=[];
         studentsInClusterArray=[];
+
+        checkSubjects();
+        checkStudents();
 
         $('#leftSubjectsList').html("");
         $('#rightSubjectsList').html("");
@@ -181,7 +182,6 @@ $(document).ready(function(){
     function checkSubjects(){
         subjectsArray = Object.keys(data[0]);
         subjectsArray.shift();
-        subjectsArray.pop();
         
         for(var i=0;i<removedSubjectsArray.length;i++){
 
@@ -189,6 +189,25 @@ $(document).ready(function(){
             
         }
         console.log(subjectsArray);
+    }
+
+    function checkStudents(){
+
+        for(var i=0;i<data.length;i++){
+            var studentCount=0;
+
+            for(var j=0;j<subjectsArray.length;j++){
+                if(data[i][ subjectsArray[j] ] == "1"){
+                    studentCount=studentCount+1;
+                }
+            }
+            
+            if(studentCount > 0){
+                selectedStudentsArray.push(parseInt( data[i]["ID"] ));
+            }
+        }
+
+        console.log(selectedStudentsArray);   
     }
 
     function generateRandomClusters(){
@@ -205,7 +224,7 @@ $(document).ready(function(){
         }
 
         for(var i=0;i<k;i++){
-            var randomStudent=Math.ceil(Math.random()*(data.length)); 
+            var randomStudent=selectedStudentsArray[Math.ceil(Math.random()*(selectedStudentsArray.length-1 ))]; 
 
             unrefinedClustersArray.push(randomStudent);
 
@@ -218,9 +237,6 @@ $(document).ready(function(){
                 var studentChecker=0;
 
                 var tempClusterStudent=[];
-                var clusterStudentID=[];
-
-                clusterStudentID.push(data[randomStudent-1]["ID:"]);
 
                 for(var j=0;j<subjectsArray.length;j++){
                     tempClusterStudent.push( parseInt( data[randomStudent-1][ subjectsArray[j] ] ) );
@@ -312,14 +328,13 @@ $(document).ready(function(){
             }
         }
 
-        console.log(clusterStudentID);
         console.log(clustersArray);
         console.log(refClustersArray);
     }
 
     function generateDistances(){
         studentsArray=[];
-        for(var i=0;i<data.length;i++){ // euclidean distance
+        for(var i=0;i<selectedStudentsArray.length;i++){ // euclidean distance
 
             euclideanDistanceArray=[];
 
@@ -329,7 +344,7 @@ $(document).ready(function(){
                 sum=0;
                 
                 for(var j=0;j<subjectsArray.length;j++){ 
-                    var clusterSubject=Math.pow( ( (clustersArray[x][j]) - parseInt(data[i][ subjectsArray[j] ]) ), 2); //x2-x1
+                    var clusterSubject=Math.pow( ( (clustersArray[x][j]) - parseInt(data[ selectedStudentsArray[i]-1 ][ subjectsArray[j] ]) ), 2); //x2-x1
                     subjectDistanceArray.push(clusterSubject);
                     
                 }
@@ -342,7 +357,7 @@ $(document).ready(function(){
             }
 
             studentsArray.push( new student( 
-                (i+1) , euclideanDistanceArray
+                (selectedStudentsArray[i]) , euclideanDistanceArray
             ))
 
         }
@@ -353,7 +368,7 @@ $(document).ready(function(){
 
         studentClusterAssignment=[];
 
-        for(var i=0;i<data.length;i++){ // find smallest cluster distance
+        for(var i=0;i<studentsArray.length;i++){ // find smallest cluster distance
 
             for(var j=0;j<k;j++){
                 currentAssign = studentsArray[i]["distances"][j]; // cluster1
@@ -383,7 +398,7 @@ $(document).ready(function(){
 
     function convertDistanceToClusterNumber(){
 
-        for(var i=0;i<data.length;i++){ // convert nearest distance to cluster number
+        for(var i=0;i<studentsArray.length;i++){ // convert nearest distance to cluster number
 
             for(var j=0;j<k;j++){
 
@@ -412,10 +427,10 @@ $(document).ready(function(){
                 var kSum=0;
                 var kCount=0;
 
-                for(var l=0;l<studentClusterAssignment.length;l++){ //loop through students
+                for(var l=0;l<selectedStudentsArray.length;l++){ //loop through students
 
                     if(studentClusterAssignment[l] == i){
-                        kSum= kSum+ parseInt( data[l][ subjectsArray[j] ] );
+                        kSum= kSum+ parseInt( data[ selectedStudentsArray[l]-1 ][ subjectsArray[j] ] );
                         kCount=kCount+1;
                     }
 
@@ -461,9 +476,9 @@ $(document).ready(function(){
         for(var i=0;i<subjectsArray.length;i++){
             var count=0;
 
-            for(var j=0;j<data.length;j++){
+            for(var j=0;j<selectedStudentsArray.length;j++){
 
-                if(data[j][ subjectsArray[i] ] == "1"){
+                if(data[ selectedStudentsArray[j]-1 ][ subjectsArray[i] ] == "1"){
                     count=count+1;
                 }
             }
@@ -485,9 +500,10 @@ $(document).ready(function(){
 
             for(var j=0;j<studentClusterAssignment.length;j++){
                 if(studentClusterAssignment[j] == i){
-                    tempStudentArray.push(j);   
+                    tempStudentArray.push( selectedStudentsArray[j]-1 );   
                 }
             }
+            console.log(tempStudentArray);
 
             studentsInClusterArray.push(tempStudentArray);
         }
@@ -501,13 +517,12 @@ $(document).ready(function(){
 
             for(var j=0;j<subjectsArray.length;j++){
 
-                var selectedSubject = subjectsArray[j];
                 var count = 0;
 
                 for(var l=0;l<selectedCluster.length;l++){
                     var selectedStudent = selectedCluster[l];
 
-                    if(data[ selectedStudent ][ selectedSubject ] == "1"){
+                    if(data[ selectedStudent ][ subjectsArray[j] ] == "1"){
                         count=count+1;
                     }
                 }
@@ -643,7 +658,7 @@ $(document).ready(function(){
             for(var j=0;j<subjectNumber;j++){   
                 var currentSubject = subjectsArray[ clusterSubjectCountArray[i].indexOf( sortedCountArray[i][j] ) ];
 
-                if(previousSubjectArray.includes(currentSubject) == false){
+                if(previousSubjectArray.includes(currentSubject) == false && clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] != undefined && clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] != 0 ){
                     if(k<=3){
                         $('#clusterDescription').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
                     }else{
@@ -693,20 +708,23 @@ $(document).ready(function(){
                         }
                     }
 
-                    if(k<=3){
-                        $('#clusterDescription').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
-                    }else{
-                        if(k==4){
-                            if(i<=1){
-                                $('#clusterDescription1').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
-                            }else{
-                                $('#clusterDescription2').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
-                            }
+                    if(clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject)] != undefined  && clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] != 0){
+
+                        if(k<=3){
+                            $('#clusterDescription').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
                         }else{
-                            if(i<=2){
-                                $('#clusterDescription1').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                            if(k==4){
+                                if(i<=1){
+                                    $('#clusterDescription1').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                                }else{
+                                    $('#clusterDescription2').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                                }
                             }else{
-                                $('#clusterDescription2').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                                if(i<=2){
+                                    $('#clusterDescription1').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                                }else{
+                                    $('#clusterDescription2').children().last().append("<div></div>").children().last().html( currentSubject +" - " + clusterSubjectCountArray[i][ subjectsArray.indexOf(currentSubject) ] ).css({"line-height":"1.6"});
+                                }
                             }
                         }
                     }
@@ -728,7 +746,7 @@ function printBubble(e){
 
     $('#bubbleInfo').append("<div></div>").children().last().html("Cluster "+(e+1)).css({"font-weight":"bold","float":"left","margin-right":"20px"});
     $('#bubbleInfo').append("<div></div>").children().last().html("Total Number: "+ selectedCluster.length).css({"float":"left"});
-    $('#bubbleInfo').append("<br>")
+    $('#bubbleInfo').append("<br>");
     for(var i=0;i<selectedCluster.length;i++){
         
             $('#bubbleInfo').append("<div onClick=printStudent("+selectedCluster[i]+")></div>").children().last().html( (selectedCluster[i]+1) ).css({"height":"10px","margin-right":"10px",
