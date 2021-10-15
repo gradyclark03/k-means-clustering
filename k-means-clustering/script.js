@@ -77,7 +77,6 @@ $(document).ready(function(){
     console.log(data);
     subjectsArray = Object.keys(data[0]);
     subjectsArray.shift();
-    subjectsArray.pop();
 
     for(var i=0;i<subjectsArray.length;i++){
 
@@ -183,7 +182,6 @@ $(document).ready(function(){
     function checkSubjects(){
         subjectsArray = Object.keys(data[0]);
         subjectsArray.shift();
-        subjectsArray.pop();
         
         for(var i=0;i<removedSubjectsArray.length;i++){
 
