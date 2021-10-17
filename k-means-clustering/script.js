@@ -1,5 +1,4 @@
 var sum=0;
-var refClustersArray=[];
 var randomStudentArray=[];
 var clustersArray=[];
 var studentsArray=[];
@@ -14,18 +13,17 @@ var currentAssign = 0;
 var nearestAssign = 0;
 var studentClusterAssignment=[];
 var previousStudentClusterAssignment = [];
-var unrefinedClustersArray=[];
 var sortedCountArray=[];
 var clusterSubjectCountArray = [];
 var subjectCountArray=[];
 var k=0;
 var unstable = 1;
 var iter = 0;
-var data;
 var printedStudentInfo=0;
 
+var data;
+
 //this is the master
-//2020 dataset branched off
 
 function student(studentNo,distances){
     this.studentNumber = studentNo;
@@ -48,7 +46,14 @@ $(document).ready(function(){
         }   
     })
     
-    //var csv is the CSV file with headers
+    /*
+     * Converts a csv file to a json file.
+     
+     * @author dChu
+     * @param {csv} input - Subject choices dataset 
+     * @return {Array} - Array of student objects
+     */
+
     function csvJSON(csv){
 
       var lines=csv.split("\n");
@@ -73,8 +78,11 @@ $(document).ready(function(){
       //return result; //JavaScript object
       return JSON.stringify(result); //JSON
     }
-    
+
     console.log(data);
+    
+    //When page loads, set subjectsArray to object keys and print these alongside checkboxes
+
     subjectsArray = Object.keys(data[0]);
     subjectsArray.shift();
 
@@ -93,6 +101,9 @@ $(document).ready(function(){
         }
 
     }
+
+    /*When checkbox is clicked, determine if has been checked or unchecked and modify removedSubjectsArray 
+    accordingly. Run checkSubjects function to redetermine selected subjects and modify webpage accordingly.*/
 
     $('input[type="checkbox"]').click(function(){
         if($(this).prop("checked") == false){
@@ -119,18 +130,8 @@ $(document).ready(function(){
         }
     })
 
-    /*$('#generateClusters').click(function(){
-        generateRandomClusters();
-    })
-
-    $('#generateDistances').click(function(){
-        generateRandomClusters();
-        generateDistances();
-    })
-    
-    $('#selectedSubjects').click(function(){
-        checkSubjects();
-    })*/
+    /* When the run algorithm button is clicked check the number of clusters inputted and run the functions for the 
+    algorithm until a stable assignment is reached.*/ 
 
     $('#runAlgorithm').click(function(){
 
@@ -161,15 +162,13 @@ $(document).ready(function(){
 
         while(unstable == 1){
             generateDistances();
-            nearestDistance();
-            convertDistanceToClusterNumber();
+            nearestDistanceAndClusterNumber();
             checkStability();
 
             iter=iter+1;
 
             calculateNewClusters();
         }
-        //console.log(unrefinedClustersArray);
 
         countSubjects()
         countSorting();
@@ -178,6 +177,14 @@ $(document).ready(function(){
         bubbleGraph();
 
     })
+
+    /*
+     * Checks the object keys (subjects) and removes the subjects that have been unselected, producing 
+     * selected subjects Array.
+     
+     * @author GC
+     * @return {Array} 
+     */
 
     function checkSubjects(){
         subjectsArray = Object.keys(data[0]);
@@ -190,6 +197,13 @@ $(document).ready(function(){
         }
         console.log(subjectsArray);
     }
+
+    /*
+     * Check if students have any selected subjects, push students with subjects to array.
+     
+     * @author GC
+     * @return {Array} 
+     */
 
     function checkStudents(){
 
@@ -210,12 +224,19 @@ $(document).ready(function(){
         console.log(selectedStudentsArray);   
     }
 
+    /*
+     * Generate random number to choose random student, check that they have not already been selected, print
+     * the random student as a starting cluster and the subjects they chose. 
+     
+     * @author GC
+     * @return {Array} - Array of random student (cluster) subject selection values.
+     */
+
     function generateRandomClusters(){
         $('#clusterInnerContainer').html("");
+
         clustersArray=[];
-        refClustersArray=[];
         randomStudentArray=[];
-        unrefinedClustersArray=[];
 
         if(k>3){
             for(var i=0;i<2;i++){
@@ -226,111 +247,92 @@ $(document).ready(function(){
         for(var i=0;i<k;i++){
             var randomStudent=selectedStudentsArray[Math.ceil(Math.random()*(selectedStudentsArray.length-1 ))]; 
 
-            unrefinedClustersArray.push(randomStudent);
-
             if(randomStudentArray.includes(randomStudent) == true ){
                 i = i-1;
                 randomStudentArray.pop();
             }else{
                 randomStudentArray.push(randomStudent);
 
-                var studentChecker=0;
-
                 var tempClusterStudent=[];
 
                 for(var j=0;j<subjectsArray.length;j++){
                     tempClusterStudent.push( parseInt( data[randomStudent-1][ subjectsArray[j] ] ) );
                 }
-                
-                for(var j=0;j<tempClusterStudent.length;j++){
-                    if(tempClusterStudent[j] == 1){
-                        studentChecker=studentChecker+1;
-                    }
-                }
+
+                tempClusterStudent.push(data[randomStudent-1]["ID"]);
 
                 if(k<=3){
                     $('#clusterInnerContainer').append("<div></div>").children().last().css({"width":(100/(k))+"%","height":"200px","float":"left"});
+
+                    $('#clusterInnerContainer').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
+                    $('#clusterInnerContainer').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
                 }else{
 
                     if(k == 4){
                         if(i<=1){
                             $('#clusterInnerContainer1').append("<div></div>").children().last().css({"width":(100/(Math.ceil(k/2)))+"%","height":"200px","float":"left"});
+
+                            $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
+                            $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
                         }else{
                             $('#clusterInnerContainer2').append("<div></div>").children().last().css({"width":(100/(Math.floor(k/2)))+"%","height":"200px","float":"left"});
+
+                            $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
+                            $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
                         }    
                     }else{
                         if(i<=2){
                             $('#clusterInnerContainer1').append("<div></div>").children().last().css({"width":(100/(Math.ceil(k/2)))+"%","height":"200px","float":"left"});
+
+                            $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
+                            $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
                         }else{
                             $('#clusterInnerContainer2').append("<div></div>").children().last().css({"width":(100/(Math.floor(k/2)))+"%","height":"200px","float":"left"});
+
+                            $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
+                            $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
                         }    
                     }                                                                              
                 }
 
+                clustersArray.push(tempClusterStudent);
 
-                if(studentChecker > 0){
-                    tempClusterStudent.push(data[randomStudent-1]["ID"]);
-                    clustersArray.push(tempClusterStudent);
-                    refClustersArray.push(data[randomStudent-1]);
 
-                    if(k<=3){
-                        $('#clusterInnerContainer').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
-                        $('#clusterInnerContainer').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
-                    }else{
-
-                        if(k==4){
-                            if(i<=1){
-                                $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
-                                $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
-                            }else{
-                                $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
-                                $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
-                            }
+                for(var j=0;j<subjectsArray.length;j++){
+                    if(clustersArray[i][j] == 1){
+                        if(k<=3){
+                            $('#clusterInnerContainer').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
                         }else{
-                            if(i<=2){
-                                $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
-                                $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
-                            }else{
-                                $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html("Cluster "+ (i+1) ).css({"font-weight":"bold"});
-                                $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html("Student "+randomStudent).css({"text-decoration":"underline"});
-                            }
-                        } 
-                    }
 
-                    for(var j=0;j<subjectsArray.length;j++){
-                        if(clustersArray[i][j] == 1){
-                            if(k<=3){
-                                $('#clusterInnerContainer').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
-                            }else{
-
-                                if(k==4){
-                                    if(i<=1){
-                                        $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
-                                    }else{
-                                        $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
-                                    }       
+                            if(k==4){
+                                if(i<=1){
+                                    $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
                                 }else{
-                                    if(i<=2){
-                                        $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
-                                    }else{
-                                        $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
-                                    }   
-                                }
+                                    $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
+                                }       
+                            }else{
+                                if(i<=2){
+                                    $('#clusterInnerContainer1').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
+                                }else{
+                                    $('#clusterInnerContainer2').children().last().append("<div></div>").children().last().html(subjectsArray[j]);
+                                }   
                             }
                         }
                     }
-
-                }else{
-                    i=i-1;
-                    console.log("dud");
-                    randomStudentArray.pop();
                 }
             }
         }
 
         console.log(clustersArray);
-        console.log(refClustersArray);
     }
+
+    /*
+     * Perform euclidean distance calculation, push object with array of students distance from each cluster and ID
+     to array.
+     
+     * @author GC
+     * @return {Array} - Array of student objects with ID and distances
+     */
 
     function generateDistances(){
         studentsArray=[];
@@ -363,21 +365,30 @@ $(document).ready(function(){
         }
         console.log(studentsArray);
     }
+
+    /*
+     * Compare each student's distance from each cluster to find the smallest distance, push to array. Convert the
+     * to the number of the cluster the distance corresponds to.
+     
+     * @author GC
+     * @return {Array} - Array of cluster number each student is closest to.
+     */
         
-    function nearestDistance(){
+    function nearestDistanceAndClusterNumber(){
+        //find nearest distance
 
         studentClusterAssignment=[];
 
-        for(var i=0;i<studentsArray.length;i++){ // find smallest cluster distance
+        for(var i=0;i<studentsArray.length;i++){
 
             for(var j=0;j<k;j++){
-                currentAssign = studentsArray[i]["distances"][j]; // cluster1
+                currentAssign = studentsArray[i]["distances"][j];
 
                 if(j==0){
                     nearestAssign = currentAssign;
                 }
 
-                if( currentAssign < nearestAssign ){ // if current <= next
+                if( currentAssign < nearestAssign ){
                     
                     nearestAssign = currentAssign;
 
@@ -393,28 +404,24 @@ $(document).ready(function(){
             studentClusterAssignment.push(nearestAssign);
 
         }
-        console.log(studentClusterAssignment);
-    }
 
-    function convertDistanceToClusterNumber(){
+        //convert to cluster number
+        for(var i=0;i<studentsArray.length;i++){ 
 
-        for(var i=0;i<studentsArray.length;i++){ // convert nearest distance to cluster number
-
-            for(var j=0;j<k;j++){
-
-                if(studentClusterAssignment[i] == studentsArray[i]["distances"][j]){
-                    
-                    studentClusterAssignment[i] = j+1;
-
-                }
-
-            }
+            studentClusterAssignment[i] = (studentsArray[i]["distances"].indexOf(studentClusterAssignment[i]) +1) ;
 
         }
 
         console.log(studentClusterAssignment);
-
     }
+
+    /*
+     * Look at the student-cluster assignments, loop through each subject and average the selections of the assigned
+     * students to find the new clusters. Push to an array.
+     
+     * @author GC
+     * @return {Array} - Array of new cluster arrays.
+     */
 
     function calculateNewClusters(){
         clustersArray=[];
@@ -445,9 +452,16 @@ $(document).ready(function(){
 
     }
 
+    /*
+     * After each iteration, check the student-cluster assignment array to see if they are the same as the previous 
+     * student-cluster assignment array. If they are, set global variable unstable to 0.
+     
+     * @author GC
+     */
+
     function checkStability(){
         if(iter > 0){
-            if(iter>10){
+            if(iter>20){
                 unstable=0;
             }
 
@@ -469,6 +483,15 @@ $(document).ready(function(){
         }
 
     }
+
+    /*
+     * Count the number of times the subjects are chosen and push to array. Display the information from this array
+     * on the page. For each cluster, push the student indexes to an array and use this to check the number of times
+     * each subject was picked for each cluster.
+     
+     * @author GC
+     * @return {Array} - Array of arrays of the number of times each subject was picked in each cluster.
+     */
 
     function countSubjects(){
         subjectCountArray=[];
@@ -535,6 +558,14 @@ $(document).ready(function(){
         
     }
 
+    /*
+     * For each cluster, deep copy the subjectCountArray and assign this copy to a new variable. Sort this new array 
+     * from highest to lowest. Push this to another array.
+     
+     * @author GC
+     * @return {Array} - Array of sorted highest to lowes arrays of most commonly chosen subjects in each cluster.
+     */
+
     function countSorting(){
         sortedCountArray=[];
 
@@ -547,6 +578,14 @@ $(document).ready(function(){
         console.log(sortedCountArray);
 
     }
+
+    /*
+     * Append a number of circles depending on the number of clusters. Make their colour be randomly generated
+     * RGB colour and their size depend on the number of students in the cluster. Print the most commonly picked 
+     * subjects for each cluster and how often they were picked, not printing duplicates or unpicked subjects.
+     
+     * @author GC
+     */
 
     
     function bubbleGraph(){
@@ -689,7 +728,7 @@ $(document).ready(function(){
                             tempCountSubjectArray.push(l);
                         }
                     }
-                    console.log((i+1));
+
                     console.log(tempCountSubjectArray);
                     var alreadyDisplayed=0;
 
@@ -731,13 +770,19 @@ $(document).ready(function(){
 
                     previousSubjectArray.push(currentSubject);
                 }
-
             }
-
         }
     }
 
+
 });
+
+/*
+ * When a cluster is clicked, print the total number of students in the cluster and each student number. Append
+ * two boxes to display two students and compare their subject selections.
+
+ * @author GC
+ */
 
 function printBubble(e){
     $('#bubbleInfo').html("");
@@ -783,6 +828,12 @@ function printBubble(e){
     })
 
 }
+
+/*
+ * When a student number is clicked, print the student number and the subjects they selected into the selected box.
+
+ * @author GC
+ */
 
 function printStudent(e){
     if( $('#checkboxStudent1').prop("checked") == true ){
