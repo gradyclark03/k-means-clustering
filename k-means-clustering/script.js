@@ -81,12 +81,12 @@ $(document).ready(function(){
 
     console.log(data);
     
-    //When page loads, set subjectsArray to object keys and print these alongside checkboxes
+    //When page loads, set subjectsArray to object keys
 
     subjectsArray = Object.keys(data[0]);
     subjectsArray.shift();
 
-    for(var i=0;i<subjectsArray.length;i++){
+    for(var i=0;i<subjectsArray.length;i++){ // loop through subjects array, split into two different columns
 
         if(i<( (subjectsArray.length)/2 )){
             $('#leftRadioContainer').append("<div></div>").children().last().css({"width":"100%","float":"left"})
@@ -110,10 +110,10 @@ $(document).ready(function(){
 
             removedSubjectsArray.push( $(this).val() );
             removedSubjectsArray.sort();
-            console.log(removedSubjectsArray);
+            //console.log(removedSubjectsArray);
         }else if( $(this).prop("checked") == true){
             removedSubjectsArray.splice( (removedSubjectsArray.indexOf( $(this).val() ) ) , 1 );        
-            console.log(removedSubjectsArray);
+            //console.log(removedSubjectsArray);
         }
         
         checkSubjects();
@@ -137,14 +137,13 @@ $(document).ready(function(){
 
         console.clear();
         console.log(data); 
+
         unstable = 1;
-        iter = 0;  
+        iter = 0;
+
         selectedStudentsArray=[];
         studentsArray=[];
         studentsInClusterArray=[];
-
-        checkSubjects();
-        checkStudents();
 
         $('#leftSubjectsList').html("");
         $('#rightSubjectsList').html("");
@@ -153,7 +152,11 @@ $(document).ready(function(){
         $('#studentInfo').html("");
         $('#clusterDescription').html("");
 
+        checkSubjects();
+        checkStudents();
+
         k=parseInt( $('#kNumber').val() );
+
         if( $('#kNumber').val() == "" ){
             k=0;
         }
@@ -195,7 +198,7 @@ $(document).ready(function(){
             subjectsArray.splice( subjectsArray.indexOf(removedSubjectsArray[i]),1 );
             
         }
-        console.log(subjectsArray);
+        //console.log(subjectsArray);
     }
 
     /*
@@ -221,7 +224,7 @@ $(document).ready(function(){
             }
         }
 
-        console.log(selectedStudentsArray);   
+        //console.log(selectedStudentsArray);   
     }
 
     /*
@@ -245,21 +248,24 @@ $(document).ready(function(){
         }
 
         for(var i=0;i<k;i++){
-            var randomStudent=selectedStudentsArray[Math.ceil(Math.random()*(selectedStudentsArray.length-1 ))]; 
+            // generate random student
+            var randomStudent=selectedStudentsArray[Math.ceil(Math.random()*(selectedStudentsArray.length-1 ))];
 
+            // check if student has already been selected
             if(randomStudentArray.includes(randomStudent) == true ){
-                i = i-1;
-                randomStudentArray.pop();
-            }else{
-                randomStudentArray.push(randomStudent);
+
+                i = i-1; // re-select student
+
+            }else{ // if student has not already been selected
+                randomStudentArray.push(randomStudent); // push randomStudent to array
 
                 var tempClusterStudent=[];
 
-                for(var j=0;j<subjectsArray.length;j++){
+                for(var j=0;j<subjectsArray.length;j++){ // construct array of student subject selections 1's and 0's
                     tempClusterStudent.push( parseInt( data[randomStudent-1][ subjectsArray[j] ] ) );
                 }
 
-                tempClusterStudent.push(data[randomStudent-1]["ID"]);
+                clustersArray.push(tempClusterStudent);
 
                 if(k<=3){
                     $('#clusterInnerContainer').append("<div></div>").children().last().css({"width":(100/(k))+"%","height":"200px","float":"left"});
@@ -295,8 +301,6 @@ $(document).ready(function(){
                     }                                                                              
                 }
 
-                clustersArray.push(tempClusterStudent);
-
 
                 for(var j=0;j<subjectsArray.length;j++){
                     if(clustersArray[i][j] == 1){
@@ -322,8 +326,6 @@ $(document).ready(function(){
                 }
             }
         }
-
-        console.log(clustersArray);
     }
 
     /*
@@ -335,35 +337,41 @@ $(document).ready(function(){
      */
 
     function generateDistances(){
+
         studentsArray=[];
-        for(var i=0;i<selectedStudentsArray.length;i++){ // euclidean distance
+        for(var i=0;i<selectedStudentsArray.length;i++){ // loop through selected students
 
             euclideanDistanceArray=[];
 
-            for(var x=0;x<k;x++){
+            for(var x=0;x<clustersArray.length;x++){ // loop through clusters
                 
                 subjectDistanceArray=[];
                 sum=0;
                 
-                for(var j=0;j<subjectsArray.length;j++){ 
-                    var clusterSubject=Math.pow( ( (clustersArray[x][j]) - parseInt(data[ selectedStudentsArray[i]-1 ][ subjectsArray[j] ]) ), 2); //x2-x1
-                    subjectDistanceArray.push(clusterSubject);
+                for(var j=0;j<subjectsArray.length;j++){ // loop through selected subjects
+
+                    // difference between cluster and student subject selection (0 or 1)
+                    var clusterSubject=Math.pow( ( (clustersArray[x][ j ]) - parseInt(data[ selectedStudentsArray[i]-1 ][ subjectsArray[j] ]) ), 2);
+
+                    // push to array
+                    subjectDistanceArray.push(clusterSubject); 
                     
                 }
                 
                 for(var j=0;j<subjectDistanceArray.length;j++){
-                    sum = sum + subjectDistanceArray[j]; // sum of x2-x1 +...for all subjects from clusters
+                    sum = sum + subjectDistanceArray[j]; // sum of all subject differences for selected student
                 }
 
-                euclideanDistanceArray.push( Math.sqrt(sum) );
+                euclideanDistanceArray.push( Math.sqrt(sum) ); // square root of sum of subject differences for selected student
+
             }
 
-            studentsArray.push( new student( 
+            studentsArray.push( new student(  // create student object, number and array of euclidean distances from each cluster
                 (selectedStudentsArray[i]) , euclideanDistanceArray
             ))
 
         }
-        console.log(studentsArray);
+        //console.log(studentsArray);
     }
 
     /*
@@ -375,44 +383,50 @@ $(document).ready(function(){
      */
         
     function nearestDistanceAndClusterNumber(){
+
         //find nearest distance
 
         studentClusterAssignment=[];
 
-        for(var i=0;i<studentsArray.length;i++){
+        for(var i=0;i<studentsArray.length;i++){ // loop through students
 
-            for(var j=0;j<k;j++){
-                currentAssign = studentsArray[i]["distances"][j];
+            for(var j=0;j<k;j++){ // loop through clusters
+
+                currentAssign = studentsArray[i]["distances"][j]; // first euclidean distance of student
 
                 if(j==0){
-                    nearestAssign = currentAssign;
+                    nearestAssign = currentAssign; // if first cluster is selected, current nearest distance is the current distance
                 }
 
-                if( currentAssign < nearestAssign ){
+                if( currentAssign < nearestAssign ){ // if the current distance is less than the nearest distance
                     
-                    nearestAssign = currentAssign;
+                    nearestAssign = currentAssign; // nearest distance becomes the current distance
 
-                }else if( currentAssign == nearestAssign){
+                }else if( currentAssign == nearestAssign){ // if the current distance is the nearest distance
                     
-                    nearestAssign = currentAssign;
+                    nearestAssign = currentAssign; // nearest distance becomes the current distance
 
-                }else if( nearestAssign < currentAssign ){
-                    
+                }else{ // if the current distance is greater than the nearest distance
+                    // do nothing
                 }
             }
+
             
-            studentClusterAssignment.push(nearestAssign);
+            studentClusterAssignment.push(nearestAssign); // push the nearest distances to an array
+
 
         }
 
         //convert to cluster number
+
         for(var i=0;i<studentsArray.length;i++){ 
 
-            studentClusterAssignment[i] = (studentsArray[i]["distances"].indexOf(studentClusterAssignment[i]) +1) ;
+            // find the index of the nearest distance and add 1, this is the nearest cluster
+
+            studentClusterAssignment[i] = (studentsArray[i]["distances"].indexOf(studentClusterAssignment[i]) +1) ; 
 
         }
-
-        console.log(studentClusterAssignment);
+        
     }
 
     /*
@@ -424,31 +438,41 @@ $(document).ready(function(){
      */
 
     function calculateNewClusters(){
+
         clustersArray=[];
-        for(var i=0;i<k;i++){
+
+        for(var i=0;i<k;i++){ // push blank arrays for number of clusters
+
             clustersArray.push([]);
+
         }
 
-        for(var i=1;i<k+1;i++){ //loop through clusters
+        for(var i=1;i<k+1;i++){ //loop through desired clusters
+
             for(var j=0;j<subjectsArray.length;j++){ //loop through subjects
+
+                // reset variables
                 var kSum=0;
                 var kCount=0;
 
-                for(var l=0;l<selectedStudentsArray.length;l++){ //loop through students
+                for(var l=0;l<selectedStudentsArray.length;l++){ // loop through valid students
 
-                    if(studentClusterAssignment[l] == i){
-                        kSum= kSum+ parseInt( data[ selectedStudentsArray[l]-1 ][ subjectsArray[j] ] );
-                        kCount=kCount+1;
+                    if(studentClusterAssignment[l] == i){ // if student-cluster assignment is the current cluster
+
+                        kSum= kSum+ parseInt( data[ selectedStudentsArray[l]-1 ][ subjectsArray[j] ] ); // add subject selection value (0 or 1)
+
+                        kCount=kCount+1; // add 1 to count
+
                     }
 
                 }
 
-                clustersArray[i-1].push( kSum/kCount );
+                clustersArray[i-1].push( kSum/kCount ); // push the average of the subject selection values to the first blank array
 
             }
         }
 
-        console.log(clustersArray);
+       // console.log(clustersArray);
 
     }
 
@@ -460,26 +484,44 @@ $(document).ready(function(){
      */
 
     function checkStability(){
+
         if(iter > 0){
+
+            // if 20 iterations have passed, abort
             if(iter>20){
+
                 unstable=0;
+
             }
 
             var stabilitySum = 0 ;
 
-            for(var i=0;i<studentClusterAssignment.length;i++){
+            for(var i=0;i<studentClusterAssignment.length;i++){ // loop through student-cluster assignments
+
+                // if all of the student-cluster assignments remained the same from the previous iteration, add 1 to a sum
+
                 if(studentClusterAssignment[i] == previousStudentClusterAssignment[i]){
                     stabilitySum=stabilitySum+1;
                 }
+
             }
 
-            if(stabilitySum == studentClusterAssignment.length){
+            // if all of the student-cluster assignments are identical, the algorithm is stable
+
+            if(stabilitySum == studentClusterAssignment.length){ 
                 unstable = 0;
             }
 
+            // current student-cluster assignment array becomes the new previous student-cluster assignment
+
             previousStudentClusterAssignment = studentClusterAssignment;
-        }else if(iter == 0){
+
+        }else if(iter == 0){ // if it is the first iteration
+
+            // current student-cluster assignment array becomes the new previous student-cluster assignment
+
             previousStudentClusterAssignment = studentClusterAssignment;
+
         }
 
     }
@@ -508,7 +550,7 @@ $(document).ready(function(){
             subjectCountArray.push(count);
         }
 
-        console.log(subjectCountArray);
+        //console.log(subjectCountArray);
 
         for(var i=0;i<subjectsArray.length;i++){
             if(i<( (subjectsArray.length)/2 )){
@@ -526,11 +568,11 @@ $(document).ready(function(){
                     tempStudentArray.push( selectedStudentsArray[j]-1 );   
                 }
             }
-            console.log(tempStudentArray);
+            //console.log(tempStudentArray);
 
             studentsInClusterArray.push(tempStudentArray);
         }
-        console.log(studentsInClusterArray);
+        //console.log(studentsInClusterArray);
 
         clusterSubjectCountArray = [];
 
@@ -554,7 +596,7 @@ $(document).ready(function(){
             }
             clusterSubjectCountArray.push(tempClusterCountArray);
         }
-        console.log(clusterSubjectCountArray);
+        //console.log(clusterSubjectCountArray);
         
     }
 
@@ -570,12 +612,12 @@ $(document).ready(function(){
         sortedCountArray=[];
 
         for(var i=0;i<clusterSubjectCountArray.length;i++){
-            const copyClusterSubjectCountArray = JSON.parse( JSON.stringify( clusterSubjectCountArray[i] ) ); //https://javascript.plainenglish.io/how-to-deep-copy-objects-and-arrays-in-javascript-7c911359b089
+            const copyClusterSubjectCountArray = JSON.parse( JSON.stringify( clusterSubjectCountArray[i] ) );
             copyClusterSubjectCountArray.sort((a,b) => b-a);
             sortedCountArray.push(copyClusterSubjectCountArray);
         }
 
-        console.log(sortedCountArray);
+        //console.log(sortedCountArray);
 
     }
 
@@ -610,7 +652,7 @@ $(document).ready(function(){
                 "border-radius":"50%","background-color":"rgb("+rgb1+","+rgb2+","+rgb3+")","float":"left",
                 "display":"inline-block","margin-right":"10px","line-height":(selectedCluster*4)+"px",
                 "color":"white","font-size":(1.7*(selectedCluster))+"px", "z-index":"0",
-                "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"}) //https://stackoverflow.com/questions/4919076/outline-effect-to-text
+                "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"})
             }else if(selectedCluster != 0 && selectedCluster> 10){
                 var rgb1=String(Math.floor(Math.random()*255));
                 var rgb2=String(Math.floor(Math.random()*255));
@@ -729,7 +771,7 @@ $(document).ready(function(){
                         }
                     }
 
-                    console.log(tempCountSubjectArray);
+                    //console.log(tempCountSubjectArray);
                     var alreadyDisplayed=0;
 
                     while(alreadyDisplayed == 0){
